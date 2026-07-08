@@ -20,8 +20,7 @@ import textwrap
 #######################
 
 # Project name
-# TODO: Update with the official name of your project or product (e.g., "Ubuntu Server")
-project = "Project"
+project = "Canonical Data Mesh"
 
 # Author name; used in the default copyright statement in the page footer
 author = "Canonical Ltd."
@@ -71,8 +70,7 @@ html_context = {
     # Your documentation GitHub repository URL If set, links for viewing the
     # documentation source files and creating GitHub issues are added at the bottom of
     # each page.
-    # TODO: Change to your documentation GitHub repository URL or leave empty.
-    "github_url": "",
+    "github_url": "https://github.com/canonical/canonical-data-mesh-docs",
     # Docs branch in the repo; used in links for viewing the source files
     "repo_default_branch": "main",
     # Docs location in the repo; used in links for viewing the source files
@@ -168,8 +166,9 @@ rediraffe_dir_only = True
 # <first sentence of home page>".
 llms_txt_description = textwrap.dedent(
     """\
-    This is the documentation for the Sphinx Stack, a template repository that helps you
-    set up, build, and publish Sphinx documentation.
+    This is the documentation for the Canonical Data Mesh, a composable solution
+    built on trusted open source projects to deploy a governed, self-service
+    data platform.
     """
 )
 
@@ -213,6 +212,10 @@ linkcheck_retries = 3
 #   - linkify
 # myst_enable_extensions = set()
 
+# Treat ```mermaid fences as the mermaid directive, so diagrams render both
+# here and on GitHub.
+myst_fence_as_directive = ["mermaid"]
+
 # Custom Sphinx extensions; see
 # https://www.sphinx-doc.org/en/master/usage/extensions/index.html
 extensions = [
@@ -234,6 +237,7 @@ extensions = [
     "sphinx_ubuntu_images",
     "sphinx_youtube_links",
     "sphinxcontrib.cairosvgconverter",
+    "sphinxcontrib.mermaid",
     "sphinx_last_updated_by_git",
     "sphinx.ext.intersphinx",
     "sphinx_sitemap",
