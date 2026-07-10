@@ -1,3 +1,5 @@
+(tutorial-datahub-ingest-metadata)=
+
 # Ingest metadata from a database
 
 An empty catalog isn't much to look at. In this step you create a small PostgreSQL database with a demo table, then use DataHub's UI-based ingestion to pull its schema into the catalog.
@@ -62,6 +64,6 @@ Type `customers` in the DataHub search bar. The table appears as a dataset with:
 - The `demo` database and schema hierarchy for browsing
 - A place to add descriptions, owners, tags, and glossary terms
 
-You have a working metadata catalog. The same flow applies to any PostgreSQL, and other connector types are available in the ingestion UI. For automatic, charm-managed ingestion of Trino catalogs, see [Integrate with Trino](../../how-to/datahub/integrate-with-trino.md).
+You have a working metadata catalog. The same flow applies to any PostgreSQL, and other connector types are available in the ingestion UI. For automatic, charm-managed ingestion of Trino catalogs, see {ref}`Integrate with Trino <how-to-datahub-integrate-with-trino>`.
 
-Continue to [clean up](06-cleanup.md).
+Continue to {ref}`clean up <tutorial-datahub-cleanup>`.

@@ -1,3 +1,5 @@
+(tutorial-datahub-cleanup)=
+
 # Clean up
 
 When you are done experimenting, remove the tutorial deployment to free up resources.
@@ -30,6 +32,6 @@ sudo snap remove juju microk8s lxd
 
 ## Next steps
 
-- Work through the [how-to guides](../../how-to/datahub/index.md) for ingress, SSO, Trino integration, and observability.
-- Read the [explanation](../../explanation/datahub/architecture.md) section to understand the architecture behind what you just deployed.
-- Check the [reference](../../reference/datahub/index.md) section for configurations, actions, and integration details.
+- Work through the {ref}`how-to guides <how-to-datahub-index>` for ingress, SSO, Trino integration, and observability.
+- Read the {ref}`explanation <explanation-datahub-architecture>` section to understand the architecture behind what you just deployed.
+- Check the {ref}`reference <reference-datahub-index>` section for configurations, actions, and integration details.

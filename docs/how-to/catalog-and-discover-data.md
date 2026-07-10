@@ -14,4 +14,4 @@ Planned outline:
 - Enrich datasets with descriptions, owners, tags, and glossary terms.
 - Search and browse the catalog; trace lineage.
 
-For charm-level tasks, see the [DataHub how-to guides](datahub/index.md).
+For charm-level tasks, see the {ref}`DataHub how-to guides <how-to-datahub-index>`.

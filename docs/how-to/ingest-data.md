@@ -6,7 +6,7 @@
 This page is a placeholder; the guide is planned but not yet written.
 ```
 
-This guide will describe how to ingest data into the platform from external systems (SaaS applications, databases, files, and APIs) using Charmed Airbyte.
+This guide will describe how to ingest data into the platform from external systems (SaaS applications, databases, files, and APIs) using Airbyte.
 
 Planned outline:
 

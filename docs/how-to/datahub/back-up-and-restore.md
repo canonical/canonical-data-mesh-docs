@@ -1,3 +1,5 @@
+(how-to-datahub-back-up-and-restore)=
+
 # Back up and restore
 
 DataHub itself is stateless: everything it serves is derived from its backing services. Backing up a DataHub deployment therefore means backing up two things:
@@ -7,11 +9,11 @@ DataHub itself is stateless: everything it serves is derived from its backing se
 
 ## Back up the metadata
 
-Use the PostgreSQL charm's built-in backup actions, which store backups in S3-compatible storage. Follow the [Charmed PostgreSQL backup guide](https://canonical-charmed-postgresql.readthedocs-hosted.com/14/how-to/back-up-and-restore/).
+Use the PostgreSQL charm's built-in backup actions, which store backups in S3-compatible storage. Follow the [PostgreSQL backup guide](https://canonical-charmed-postgresql.readthedocs-hosted.com/14/how-to/back-up-and-restore/).
 
 ## Back up the indices
 
-OpenSearch indices can be backed up with the OpenSearch charm's snapshot actions, as described in the [Charmed OpenSearch backup guide](https://charmhub.io/opensearch/docs/h-create-backup).
+OpenSearch indices can be backed up with the OpenSearch charm's snapshot actions, as described in the [OpenSearch backup guide](https://charmhub.io/opensearch/docs/h-create-backup).
 
 However, since the indices are derived data, it is often easier to skip index backups entirely and rebuild them after a restore.
 

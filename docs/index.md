@@ -1,8 +1,10 @@
+(home)=
+
 # Canonical Data Mesh
 
 The Canonical Data Mesh is a composable data platform solution built on trusted open source projects. It deploys a governed, self-service data platform where teams can ingest, discover, query, and visualize data under centralized governance and access control.
 
-The solution combines charmed operators for Apache Superset, Trino, Apache Ranger, DataHub, Airbyte, Temporal, PostgreSQL, Hive Metastore, and their dependencies, wired together through Juju relations. Data is ingested from source systems, queried through a federated layer, and explored through dashboards and a dedicated catalog, with every action subject to fine-grained access control.
+The solution combines a set of charmed operators, wired together through Juju relations, each responsible for one part of the data lifecycle. Data is ingested from source systems, queried through a federated layer, and explored through dashboards and a dedicated catalog, with every action subject to fine-grained access control.
 
 The Canonical Data Mesh is for platform and data teams that want self-service analytics and cross-system reporting without building and operating a bespoke data stack.
 
@@ -46,9 +48,9 @@ The Canonical Data Mesh is for platform and data teams that want self-service an
 
 ## How this documentation is organized
 
-This site is the single home for the Canonical Data Mesh documentation with each section of the four above containing solution-level pages first, followed by a subsection for each charm.
+This site is the single home for the Canonical Data Mesh documentation, organized with the [Diátaxis](https://diataxis.fr/) framework: each of the four sections above contains solution-level pages first, followed by a subsection for each charm.
 
-Charm configuration options, actions, and integration endpoints are enumerated on each charm's Charmhub page (generated from the charm itself) and are not duplicated here.
+Charm configuration options, actions, and integration endpoints are enumerated on each charm's Charmhub page (generated from the charm itself) and are not duplicated here. Check the {ref}`Components <reference-components>` reference page for links to every charm's Charmhub page.
 
 ## Project and community
 

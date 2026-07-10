@@ -1,6 +1,8 @@
+(how-to-datahub-index)=
+
 # DataHub how-to guides
 
-These guides cover common operational tasks and configurations for Charmed DataHub. They assume a working deployment; to build one from scratch, start with the [DataHub tutorial](../../tutorials/datahub/index.md).
+These guides cover common operational tasks and configurations for DataHub. They assume a working deployment; to build one from scratch, start with the {ref}`DataHub tutorial <tutorial-datahub-index>`.
 
 ## Deployment and access
 

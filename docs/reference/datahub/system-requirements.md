@@ -1,3 +1,5 @@
+(reference-datahub-system-requirements)=
+
 # System requirements
 
 ## Software
@@ -34,7 +36,7 @@ fs.file-max=1048576
 
 ## Resource sizing
 
-For a single-host evaluation deployment (the [tutorial](../../tutorials/datahub/index.md) setup with the full data platform co-located):
+For a single-host evaluation deployment (the {ref}`tutorial <tutorial-datahub-index>` setup with the full data platform co-located):
 
 | Resource | Minimum |
 |---|---|
@@ -42,7 +44,7 @@ For a single-host evaluation deployment (the [tutorial](../../tutorials/datahub/
 | RAM | 24 GB |
 | Disk | 80 GB |
 
-The DataHub pod alone runs three workloads: two JVM services (GMS and frontend) and the Python-based actions framework. Production sizing depends on metadata volume and ingestion frequency; monitor JVM heap metrics (see [Observability](observability.md)) to size the deployment.
+The DataHub pod alone runs three workloads: two JVM services (GMS and frontend) and the Python-based actions framework. Production sizing depends on metadata volume and ingestion frequency; monitor JVM heap metrics (see {ref}`Observability <reference-datahub-observability>`) to size the deployment.
 
 ## Supported dependency channels
 

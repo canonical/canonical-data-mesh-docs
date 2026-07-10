@@ -1,3 +1,5 @@
+(tutorial-datahub-environment-setup)=
+
 # Set up your environment
 
 DataHub requires a multi-cloud Juju setup: the DataHub charm runs on Kubernetes, while OpenSearch requires a machine cloud. In this step you install LXD and MicroK8s on one host, bootstrap a Juju controller on each, and create the two models used throughout the tutorial.
@@ -65,7 +67,7 @@ juju models -c lxd
 juju models -c microk8s
 ```
 
-You should see the `lxd` and `microk8s` controllers, each with its model. You are now ready to [deploy the supporting charms](03-deploy-supporting-charms.md).
+You should see the `lxd` and `microk8s` controllers, each with its model. You are now ready to {ref}`deploy the supporting charms <tutorial-datahub-deploy-supporting-charms>`.
 
 ```{note}
 A single controller with both clouds registered also works and is what the

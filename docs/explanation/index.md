@@ -18,5 +18,5 @@ governance-model
 ```{toctree}
 :maxdepth: 1
 
-Charmed DataHub architecture <datahub/architecture>
+DataHub architecture <datahub/architecture>
 ```

@@ -19,5 +19,5 @@ requirements
 ```{toctree}
 :maxdepth: 1
 
-Charmed DataHub <datahub/index>
+DataHub <datahub/index>
 ```

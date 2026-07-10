@@ -1,3 +1,5 @@
+(how-to-datahub-expose-with-ingress)=
+
 # Expose DataHub with ingress
 
 This guide describes how to expose DataHub's web frontend and metadata service (GMS) API through an ingress, with TLS termination at the ingress.
@@ -11,7 +13,7 @@ Any charm that provides the `ingress` interface works, for example [Traefik](htt
 
 ## Prerequisites
 
-- A running DataHub deployment (see the [tutorial](../../tutorials/datahub/index.md))
+- A running DataHub deployment (see the {ref}`tutorial <tutorial-datahub-index>`)
 - A Kubernetes cluster with load balancer support. On MicroK8s, enable MetalLB with an address range that suits your network:
 
 ```bash
@@ -42,7 +44,7 @@ juju integrate traefik-frontend:certificates self-signed-certificates:certificat
 juju integrate traefik-gms:certificates self-signed-certificates:certificates
 ```
 
-For production, use an ACME provider such as [Lego](https://charmhub.io/lego) instead. Single sign-on requires the frontend URL to be HTTPS - see [Enable single sign-on](enable-sso.md).
+For production, use an ACME provider such as [Lego](https://charmhub.io/lego) instead. Single sign-on requires the frontend URL to be HTTPS - see {ref}`Enable single sign-on <how-to-datahub-enable-sso>`.
 
 ## Find the published URLs
 

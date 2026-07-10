@@ -1,3 +1,5 @@
+(how-to-datahub-deploy-with-terraform)=
+
 # Deploy with Terraform
 
 This guide describes how to deploy DataHub with the Terraform modules shipped in the [charm repository](https://github.com/canonical/datahub-k8s-operator/tree/main/terraform), using the [Terraform Juju provider](https://registry.terraform.io/providers/juju/juju/latest).
@@ -23,7 +25,7 @@ juju add-model datahub-vm localhost
 juju add-model datahub-k8s microk8s --config workload-storage=microk8s-hostpath
 ```
 
-The machine host needs the OpenSearch kernel parameters described in the [tutorial](../../tutorials/datahub/02-environment-setup.md).
+The machine host needs the OpenSearch kernel parameters described in the {ref}`tutorial <tutorial-datahub-environment-setup>`.
 
 ## Choose a data platform mode
 

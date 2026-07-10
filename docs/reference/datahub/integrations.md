@@ -1,3 +1,5 @@
+(reference-datahub-integrations)=
+
 # Integrations
 
 ## Relation endpoints

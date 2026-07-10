@@ -1,3 +1,5 @@
+(how-to-datahub-enable-sso)=
+
 # Enable single sign-on
 
 This guide describes how to enable SSO login for DataHub. The charm receives OIDC credentials over the `oauth` relation, either from the [Canonical Identity Platform](https://charmhub.io/topics/canonical-identity-platform) or from an [oauth-external-idp-integrator](https://charmhub.io/oauth-external-idp-integrator) bridging an external identity provider such as Google or Azure AD.
@@ -5,7 +7,7 @@ This guide describes how to enable SSO login for DataHub. The charm receives OID
 ## Prerequisites
 
 - A running DataHub deployment
-- An HTTPS frontend ingress. SSO requires the `frontend-ingress` URL to be HTTPS; the charm stays blocked with `OIDC requires an HTTPS ingress URL` until that is the case. See [Expose DataHub with ingress](expose-with-ingress.md).
+- An HTTPS frontend ingress. SSO requires the `frontend-ingress` URL to be HTTPS; the charm stays blocked with `OIDC requires an HTTPS ingress URL` until that is the case. See {ref}`Expose DataHub with ingress <how-to-datahub-expose-with-ingress>`.
 
 ## Option A: Use the Canonical Identity Platform
 
@@ -65,4 +67,4 @@ Note that this option makes the frontend service stateful and is currently unsup
 
 ## Deployments behind an HTTP proxy
 
-If your model runs in a restricted network, the frontend needs proxy settings to reach the identity provider. See [Configure model proxies](configure-model-proxies.md).
+If your model runs in a restricted network, the frontend needs proxy settings to reach the identity provider. See {ref}`Configure model proxies <how-to-datahub-configure-model-proxies>`.

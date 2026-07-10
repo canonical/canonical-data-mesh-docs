@@ -1,3 +1,5 @@
+(tutorial-datahub-deploy-supporting-charms)=
+
 # Deploy supporting charms
 
 DataHub relies on three backing services, each provided by an existing charm:
@@ -56,4 +58,4 @@ Verify the offers:
 juju offers
 ```
 
-You should see `pg-client`, `kafka-client`, and `os-client` listed. The data platform is ready; continue to [deploy Charmed DataHub](04-deploy-datahub.md).
+You should see `pg-client`, `kafka-client`, and `os-client` listed. The data platform is ready; continue to {ref}`deploy DataHub <tutorial-datahub-deploy-datahub>`.

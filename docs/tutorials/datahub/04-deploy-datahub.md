@@ -1,4 +1,6 @@
-# Deploy Charmed DataHub
+(tutorial-datahub-deploy-datahub)=
+
+# Deploy DataHub
 
 With the data platform running, you can now deploy DataHub itself in the Kubernetes model and connect it to PostgreSQL, Kafka, and OpenSearch.
 
@@ -68,7 +70,7 @@ Log in with the username `datahub` and the password from the action. You should 
 ```{note}
 Accessing the unit IP directly is fine for a local tutorial. For anything
 beyond that, expose DataHub through an ingress - see
-[Expose DataHub with ingress](../../how-to/datahub/expose-with-ingress.md).
+{ref}`Expose DataHub with ingress <how-to-datahub-expose-with-ingress>`.
 ```
 
-DataHub is up and running. Continue to [ingest metadata from a database](05-ingest-metadata.md).
+DataHub is up and running. Continue to {ref}`ingest metadata from a database <tutorial-datahub-ingest-metadata>`.

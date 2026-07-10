@@ -1,6 +1,8 @@
+(reference-datahub-observability)=
+
 # Observability
 
-Reference for the telemetry Charmed DataHub exposes over its observability relations. For setup instructions, see [Observe DataHub](../../how-to/datahub/observe-datahub.md).
+Reference for the telemetry DataHub exposes over its observability relations. For setup instructions, see {ref}`Observe DataHub <how-to-datahub-observe-datahub>`.
 
 ## Metrics endpoints
 

@@ -1,6 +1,8 @@
+(explanation-datahub-architecture)=
+
 # Architecture
 
-This page explains the components of a Charmed DataHub deployment, how they fit together, and the design decisions behind the charm.
+This page explains the components of a DataHub deployment, how they fit together, and the design decisions behind the charm.
 
 ## The DataHub workloads
 

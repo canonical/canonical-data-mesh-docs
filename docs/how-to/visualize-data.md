@@ -6,7 +6,7 @@
 This page is a placeholder; the guide is planned but not yet written.
 ```
 
-This guide will describe how to explore and visualize governed data with Charmed Superset.
+This guide will describe how to explore and visualize governed data with Superset.
 
 Planned outline:
 

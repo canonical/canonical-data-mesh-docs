@@ -1,6 +1,8 @@
-# Get started with Charmed DataHub
+(tutorial-datahub-index)=
 
-This tutorial describes how to get started with Charmed DataHub. It takes you from setting up a local Juju environment, through deploying DataHub and its supporting charms, to ingesting metadata from a PostgreSQL database and exploring it in the DataHub UI.
+# Get started with DataHub
+
+This tutorial describes how to get started with DataHub. It takes you from setting up a local Juju environment, through deploying DataHub and its supporting charms, to ingesting metadata from a PostgreSQL database and exploring it in the DataHub UI.
 
 DataHub relies on three backing services: PostgreSQL for metadata storage, Kafka for event streaming, and OpenSearch for search and graph indexing. OpenSearch runs on machines rather than Kubernetes, so this tutorial builds a small two-cloud environment on a single host: an LXD cloud for the data platform and a MicroK8s cloud for DataHub itself. This mirrors how production deployments are structured, just at a smaller scale.
 
@@ -20,11 +22,11 @@ The DataHub stack is memory-hungry: it runs three JVM-based workloads alongside 
 
 ## Tutorial steps
 
-1. [Set up your environment](02-environment-setup.md)
-2. [Deploy supporting charms](03-deploy-supporting-charms.md)
-3. [Deploy Charmed DataHub](04-deploy-datahub.md)
-4. [Ingest metadata from a database](05-ingest-metadata.md)
-5. [Clean up](06-cleanup.md)
+1. {ref}`Set up your environment <tutorial-datahub-environment-setup>`: install LXD and MicroK8s, and bootstrap the two Juju controllers this tutorial uses.
+2. {ref}`Deploy supporting charms <tutorial-datahub-deploy-supporting-charms>`: deploy PostgreSQL, Kafka, and OpenSearch, and offer them for cross-model access.
+3. {ref}`Deploy DataHub <tutorial-datahub-deploy-datahub>`: deploy DataHub, relate it to its backing services, and log in to the UI.
+4. {ref}`Ingest metadata from a database <tutorial-datahub-ingest-metadata>`: create a demo table and pull its schema into the DataHub catalog.
+5. {ref}`Clean up <tutorial-datahub-cleanup>`
 
 ```{toctree}
 :hidden:

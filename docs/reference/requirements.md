@@ -15,7 +15,7 @@ Platform requirements for the Data Mesh:
 
 Some components have additional requirements:
 
-- OpenSearch (a DataHub dependency) requires a machine cloud and specific kernel parameters on its host, see the [DataHub system requirements](datahub/system-requirements.md).
+- OpenSearch (a DataHub dependency) requires a machine cloud and specific kernel parameters on its host, see the {ref}`DataHub system requirements <reference-datahub-system-requirements>`.
 - Cross-model relations are used throughout; a single controller with both a Kubernetes and a machine cloud registered is the recommended topology.
 
 Planned content:

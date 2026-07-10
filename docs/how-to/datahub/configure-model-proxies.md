@@ -1,3 +1,5 @@
+(how-to-datahub-configure-model-proxies)=
+
 # Configure model proxies
 
 If your model runs in a restricted network, configure Juju model proxies so the DataHub containers can reach external services, such as Python package indexes for ingestion recipes or an external identity provider.

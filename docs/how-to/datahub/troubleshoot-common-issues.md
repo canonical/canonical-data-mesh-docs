@@ -1,6 +1,8 @@
+(how-to-datahub-troubleshoot-common-issues)=
+
 # Troubleshoot common issues
 
-This guide collects the most common failure modes of a Charmed DataHub deployment and how to diagnose them.
+This guide collects the most common failure modes of a DataHub deployment and how to diagnose them.
 
 ## Check the charm and workload status first
 
@@ -9,7 +11,7 @@ juju status --relations
 juju debug-log --include datahub-k8s
 ```
 
-A blocked status message usually names the missing piece - for example a missing relation, a missing secret grant, or `OIDC requires an HTTPS ingress URL` (see [Enable single sign-on](enable-sso.md)).
+A blocked status message usually names the missing piece - for example a missing relation, a missing secret grant, or `OIDC requires an HTTPS ingress URL` (see {ref}`Enable single sign-on <how-to-datahub-enable-sso>`).
 
 ## Ingestion fails or `/graphql` returns 500
 
@@ -28,7 +30,7 @@ If search results are missing after a migration, restore, or upgrade, the indice
 juju run datahub-k8s/leader reindex
 ```
 
-See [Back up and restore](back-up-and-restore.md) for details.
+See {ref}`Back up and restore <how-to-datahub-back-up-and-restore>` for details.
 
 ## GMS fails to initialize
 
@@ -52,7 +54,7 @@ The GMS is a large JVM application; a cold start can take several minutes, and t
 
 ## The frontend loads but the page is blank
 
-A blank page with browser console errors about `/assets/...` MIME types means the frontend is served behind a path-prefix ingress route. The DataHub SPA requires host-based routing; see [Expose DataHub with ingress](expose-with-ingress.md).
+A blank page with browser console errors about `/assets/...` MIME types means the frontend is served behind a path-prefix ingress route. The DataHub SPA requires host-based routing; see {ref}`Expose DataHub with ingress <how-to-datahub-expose-with-ingress>`.
 
 ## Getting more help
 

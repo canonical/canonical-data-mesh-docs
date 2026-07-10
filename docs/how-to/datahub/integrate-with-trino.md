@@ -1,6 +1,8 @@
+(how-to-datahub-integrate-with-trino)=
+
 # Integrate with Trino
 
-This guide describes how to connect DataHub to [Charmed Trino](https://charmhub.io/trino-k8s), a distributed SQL query engine. The integration lets DataHub discover Trino catalogs and set up a scheduled metadata ingestion for each one with no manual ingestion configuration required.
+This guide describes how to connect DataHub to [Trino](https://charmhub.io/trino-k8s), a distributed SQL query engine. The integration lets DataHub discover Trino catalogs and set up a scheduled metadata ingestion for each one with no manual ingestion configuration required.
 
 ## Establish the relation
 
@@ -59,4 +61,4 @@ The schedule, description, executor, and any additional arguments can be edited 
 - When the relation is removed entirely, all Juju-managed ingestion sources and their secrets are cleaned up.
 - Already ingested metadata is *not* removed; datasets stay in the catalog until they age out or are hard-deleted.
 
-User-created ingestion sources and secrets are never touched. See [Integrations](../../reference/datahub/integrations.md) for the naming conventions that identify charm-managed resources.
+User-created ingestion sources and secrets are never touched. See {ref}`Integrations <reference-datahub-integrations>` for the naming conventions that identify charm-managed resources.

@@ -1,3 +1,5 @@
+(how-to-datahub-observe-datahub)=
+
 # Observe DataHub
 
 This guide describes how to wire DataHub into the [Canonical Observability Stack](https://charmhub.io/topics/canonical-observability-stack) (COS) to get metrics, a Grafana dashboard, alert rules, and logs.
@@ -49,4 +51,4 @@ In Loki (or the dashboard's log panels), logs should stream from all three conta
 
 ## Alerts
 
-The charm ships four Prometheus alert rules covering service availability, JVM heap starvation, excessive garbage collection, and Kafka consumer lag. They load automatically over the `metrics-endpoint` relation. See [Observability](../../reference/datahub/observability.md) for the full list, thresholds, and metric names.
+The charm ships four Prometheus alert rules covering service availability, JVM heap starvation, excessive garbage collection, and Kafka consumer lag. They load automatically over the `metrics-endpoint` relation. See {ref}`Observability <reference-datahub-observability>` for the full list, thresholds, and metric names.
