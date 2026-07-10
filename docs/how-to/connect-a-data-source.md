@@ -1,6 +1,6 @@
 (how-to-connect-a-data-source)=
 
-# Connect a data source
+# Connect a data source to Trino
 
 ```{note}
 This page is a placeholder; the guide is planned but not yet written.

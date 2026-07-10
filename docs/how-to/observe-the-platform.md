@@ -1,6 +1,6 @@
 (how-to-observe-the-platform)=
 
-# Observe the platform
+# Observe the platform with COS
 
 ```{note}
 This page is a placeholder; the guide is planned but not yet written.
