@@ -20,9 +20,15 @@ The charm propagates the settings as follows:
 
 ## Apply the change
 
-After changing the model proxy settings, allow one `update-status` cycle or trigger another hook event (for example a configuration change) so the charm refreshes its Pebble plans.
+Changing model configuration does not propagate to a running unit. The `JUJU_CHARM_HTTP_PROXY`, `JUJU_CHARM_HTTPS_PROXY`, and `JUJU_CHARM_NO_PROXY` environment variables the charm reads are set only when the unit's pod starts.
 
-To verify the variables on a container:
+To apply the change, delete the pod so it is recreated with the new model configuration:
+
+```bash
+kubectl -n <NAMESPACE> delete pod datahub-k8s-0
+```
+
+Once the pod is running again, verify that the new values reached the container:
 
 ```bash
 kubectl -n <NAMESPACE> exec -c datahub-actions datahub-k8s-0 -- pebble plan | grep -i proxy
