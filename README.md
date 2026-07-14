@@ -4,7 +4,7 @@ Documentation for the [Canonical Data Mesh](https://charmhub.io/solutions/previe
 
 ## Scope
 
-This repository is the **single home** for Data Mesh documentation: solution architecture, cross-charm workflows, platform operations, and the documentation of the individual charms. Content is organized with the [Diátaxis](https://diataxis.fr/) framework (`tutorials/`, `how-to/`, `reference/`, `explanation/`), with solution-level pages first and a subsection per charm inside each section (for example `how-to/datahub/`).
+This repository is the **single home** for the Canonical Data Mesh documentation: solution architecture, cross-charm workflows, platform operations, and the documentation of the individual charms. Content is organized with the [Diátaxis](https://diataxis.fr/) framework (`tutorials/`, `how-to/`, `reference/`, `explanation/`), with solution-level pages first and a subsection per charm inside each section (for example `how-to/datahub/`).
 
 ## Build the docs locally
 

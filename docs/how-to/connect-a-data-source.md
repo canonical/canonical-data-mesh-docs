@@ -6,7 +6,7 @@
 This page is a placeholder; the guide is planned but not yet written.
 ```
 
-This guide will describe how to bring an existing database into the Data Mesh as a governed, queryable catalog: from a source PostgreSQL database, through a Trino catalog, to a Ranger security zone and an automatically created Superset database connection.
+This guide will describe how to bring an existing database into the Canonical Data Mesh as a governed, queryable catalog: from a source PostgreSQL database, through a Trino catalog, to a Ranger security zone and an automatically created Superset database connection.
 
 Planned outline:
 

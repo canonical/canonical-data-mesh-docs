@@ -54,7 +54,7 @@ The GMS is a large JVM application; a cold start can take several minutes, and t
 
 ## The frontend loads but the page is blank
 
-A blank page with browser console errors about `/assets/...` MIME types means the frontend is served behind a path-prefix ingress route. The DataHub SPA requires host-based routing; see {ref}`Expose DataHub with ingress <how-to-datahub-expose-with-ingress>`.
+A blank page with browser console errors about `/assets/...` MIME types means the frontend is served behind a path-prefix ingress route. The DataHub Single Page Application requires host-based routing; see {ref}`Expose DataHub with ingress <how-to-datahub-expose-with-ingress>`.
 
 ## Getting more help
 

@@ -2,7 +2,7 @@
 
 # How-to guides
 
-Task-oriented guides for deploying, integrating, and operating the Data Mesh. Solution-level guides cover cross-charm workflows; the component subsections cover tasks specific to one charm.
+Task-oriented guides for deploying, integrating, and operating the Canonical Data Mesh. Solution-level guides cover cross-charm workflows; the component subsections cover tasks specific to one charm.
 
 ## Deploy and operate
 

@@ -32,9 +32,9 @@ The DataHub stack is memory-hungry: it runs three JVM-based workloads alongside 
 :hidden:
 :maxdepth: 1
 
-02-environment-setup
-03-deploy-supporting-charms
-04-deploy-datahub
-05-ingest-metadata
-06-cleanup
+01-environment-setup
+02-deploy-supporting-charms
+03-deploy-datahub
+04-ingest-metadata
+05-cleanup
 ```

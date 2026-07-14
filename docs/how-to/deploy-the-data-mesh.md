@@ -1,12 +1,12 @@
 (how-to-deploy-the-data-mesh)=
 
-# Deploy the Data Mesh
+# Deploy the Canonical Data Mesh
 
 ```{note}
 This page is a placeholder; the guide is planned but not yet written.
 ```
 
-This guide will describe how to deploy the Data Mesh for production-like environments using the Terraform product modules of the component charms.
+This guide will describe how to deploy the Canonical Data Mesh for production-like environments using the Terraform product modules of the component charms.
 
 Planned outline:
 

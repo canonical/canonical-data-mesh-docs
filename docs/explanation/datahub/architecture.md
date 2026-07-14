@@ -50,7 +50,7 @@ This topology is usually multi-cloud: the DataHub charm is a Kubernetes charm, w
 
 The frontend and the GMS serve different audiences. The frontend is a browser-facing single-page application; the GMS API is consumed by ingestion jobs, the DataHub CLI, and other services. Separating them into `frontend-ingress` and `gms-ingress` lets each get its own hostname, TLS configuration, and access policy - for example, a public UI hostname with SSO while the API stays internal.
 
-The frontend SPA is compiled with absolute asset paths, which is why it must be served at the root of a hostname (host-based routing) rather than under a path prefix.
+The frontend Single Page Application is compiled with absolute asset paths, which is why it must be served at the root of a hostname (host-based routing) rather than under a path prefix.
 
 ## Charm design
 

@@ -2,7 +2,7 @@
 
 # Components
 
-The Data Mesh is composed of the following charmed operators.
+The Canonical Data Mesh is composed of the following charmed operators.
 
 | Component | Role in the solution | Charmhub |
 |---|---|---|

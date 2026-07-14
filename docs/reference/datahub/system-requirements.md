@@ -8,7 +8,7 @@
 |---|---|
 | Juju | 3.4 or later |
 | Kubernetes | A cluster supported by Juju, with a default storage class |
-| DataHub workload | 1.4 series (packaged as rocks with the charm resources) |
+| DataHub workload | 1.4 series (packaged as [rocks](https://documentation.ubuntu.com/rockcraft/en/stable/) with the charm resources) |
 
 ## Cloud topology
 
@@ -52,9 +52,9 @@ The deployment flows in this documentation are tested with:
 
 | Charm | Channel |
 |---|---|
-| postgresql | 14/stable |
-| kafka | 3/stable |
-| zookeeper | 3/stable |
-| opensearch | 2/stable |
-| self-signed-certificates | latest/stable |
-| traefik-k8s | latest/stable |
+| [postgresql](https://charmhub.io/postgresql) | 14/stable |
+| [kafka](https://charmhub.io/kafka) | 3/stable |
+| [zookeeper](https://charmhub.io/zookeeper) | 3/stable |
+| [opensearch](https://charmhub.io/opensearch) | 2/stable |
+| [self-signed-certificates](https://charmhub.io/self-signed-certificates) | latest/stable |
+| [traefik-k8s](https://charmhub.io/traefik-k8s) | latest/stable |

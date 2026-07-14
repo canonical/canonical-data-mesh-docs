@@ -6,12 +6,12 @@
 This page is a placeholder; the tutorial is planned but not yet written.
 ```
 
-This tutorial will take you through a first, complete deployment of the Data Mesh on a single host, ending with a real dataset visible in a Superset chart and discoverable in the DataHub catalog.
+This tutorial will take you through a first, complete deployment of the Canonical Data Mesh on a single host, ending with a real dataset visible in a Superset chart and discoverable in the DataHub catalog.
 
 Planned outline:
 
 1. Set up the environment (Juju, Kubernetes, and machine clouds).
-2. Deploy the Data Mesh charms, configure, and integrate them.
+2. Deploy the Canonical Data Mesh charms, configure, and integrate them.
 3. Create a source database and expose it as a Trino catalog.
 4. Grant access with a Ranger policy.
 5. Query the data in Superset and build a first chart.

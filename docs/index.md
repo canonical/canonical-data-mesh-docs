@@ -16,7 +16,7 @@ The Canonical Data Mesh is for platform and data teams that want self-service an
 :link: tutorials/index
 :link-type: doc
 
-**Get started**: deploy the Data Mesh or an individual component for the first time and see a real result.
+**Get started**: deploy the Canonical Data Mesh or an individual component for the first time and see a real result.
 ````
 
 ````{grid-item-card} How-to guides
@@ -41,7 +41,7 @@ The Canonical Data Mesh is for platform and data teams that want self-service an
 :link: explanation/index
 :link-type: doc
 
-**Concepts**: the ideas behind the data mesh, its governance model, and the design of its components.
+**Concepts**: the ideas behind the Canonical Data Mesh, its governance model, and the design of its components.
 ````
 
 `````

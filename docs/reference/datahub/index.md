@@ -2,7 +2,7 @@
 
 # DataHub reference
 
-**DataHub** ([datahub-k8s](https://charmhub.io/datahub-k8s)) is a Kubernetes operator for [DataHub](https://datahubproject.io/), the extensible data catalog that provides the Data Mesh with data discovery, data observability, and federated governance. The charm manages the DataHub metadata service (GMS), the web frontend, and the actions framework, and integrates with PostgreSQL, Kafka, OpenSearch, Trino, ingress providers, identity providers, and the Canonical Observability Stack.
+**DataHub** ([datahub-k8s](https://charmhub.io/datahub-k8s)) is a Kubernetes operator for [DataHub](https://datahubproject.io/), the extensible data catalog that provides the Canonical Data Mesh with data discovery, data observability, and federated governance. The charm manages the DataHub metadata service (GMS), the web frontend, and the actions framework, and integrates with PostgreSQL, Kafka, OpenSearch, Trino, ingress providers, identity providers, and the Canonical Observability Stack.
 
 ## Reference pages
 

@@ -10,7 +10,7 @@ Deploy Trino if you don't have it yet, then relate the two charms over the `trin
 
 ```bash
 juju deploy trino-k8s --channel latest/edge
-juju integrate datahub-k8s:trino-catalog trino-k8s
+juju integrate datahub-k8s trino-k8s
 ```
 
 If Trino runs in a different model, use a cross-model relation. From the Trino model:
@@ -23,7 +23,7 @@ Then, from the DataHub model:
 
 ```bash
 juju consume <CONTROLLER>:admin/<TRINO_MODEL>.trino-catalog
-juju integrate datahub-k8s:trino-catalog trino-catalog
+juju integrate datahub-k8s trino-catalog
 ```
 
 ## Verify

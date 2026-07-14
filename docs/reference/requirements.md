@@ -6,7 +6,7 @@
 This page is a placeholder; detailed sizing guidance is planned.
 ```
 
-Platform requirements for the Data Mesh:
+Platform requirements for the Canonical Data Mesh:
 
 | Requirement | Version |
 |---|---|

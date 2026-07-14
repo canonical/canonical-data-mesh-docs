@@ -2,7 +2,7 @@
 
 # Explanation
 
-Conceptual documentation about the ideas behind the Data Mesh: what a data mesh is, how the solution embodies it, how governance works across the platform, and how the individual components are designed.
+Conceptual documentation about the ideas behind the Canonical Data Mesh: what a data mesh is, how the solution embodies it, how governance works across the platform, and how the individual components are designed.
 
 ## Solution
 

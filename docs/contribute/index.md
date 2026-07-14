@@ -6,7 +6,7 @@ This documentation is built with Sphinx from the [canonical-data-mesh-docs](http
 
 ## Where content lives
 
-This site is the single home for Data Mesh documentation. Follow these placement rules:
+This site is the single home for the Canonical Data Mesh documentation. Follow these placement rules:
 
 - **Solution-level pages** (cross-charm workflows, architecture, concepts) live at the top level of each section.
 - **Charm-specific pages** live in the charm's subsection of each section (for example `how-to/datahub/`).
