@@ -40,7 +40,9 @@ juju expose opensearch --endpoints opensearch-client
 
 ## Wait for the applications to settle
 
-The data platform takes 10–15 minutes to become active. You can watch progress with `juju status --watch 1s`.
+The data platform takes 15-25 minutes to become active. You can watch progress with `juju status --watch 1s`.
+
+Individual units may briefly show `blocked` or `error` while others are still settling, for example Kafka showing `Broker not running`, or OpenSearch showing `hook failed: "secret-changed"`. These clear on their own as Juju's status checks catch up and don't need manual intervention (such as `juju resolve`); only investigate if a unit is still stuck once every other application has reached `active`.
 
 ## Offer the endpoints to other models
 

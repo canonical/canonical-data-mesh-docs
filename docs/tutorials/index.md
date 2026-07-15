@@ -14,7 +14,10 @@ get-started
 
 ## Components
 
+- {ref}`Charmed DataHub <tutorial-datahub-index>`: an extensible data catalog for data discovery, observability, and governance.
+
 ```{toctree}
+:hidden:
 :maxdepth: 1
 
 DataHub <datahub/index>

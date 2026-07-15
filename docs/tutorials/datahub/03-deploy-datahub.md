@@ -47,7 +47,7 @@ juju integrate datahub-k8s os-client
 
 ## Wait for DataHub to initialize
 
-On first startup, DataHub prepares its database schema, creates its OpenSearch indices and Kafka topics, and runs a one-time system upgrade job before the services start. This takes up to 20 minutes. You can watch progress with `juju status --watch 1s`.
+On first startup, the charm pulls three container images (actions, frontend, and GMS, several gigabytes combined), then DataHub prepares its database schema, creates its OpenSearch indices and Kafka topics, and runs a one-time system upgrade job before the services start. The image pulls are usually the bulk of the wait and depend heavily on network speed; the DataHub-specific setup that follows is comparatively fast. Expect up to 20 minutes on a normal connection, more on a slow one. You can watch progress with `juju status --watch 1s`.
 
 ## Log in to DataHub
 

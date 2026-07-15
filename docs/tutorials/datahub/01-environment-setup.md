@@ -23,7 +23,7 @@ MicroK8s provides the Kubernetes cloud that hosts DataHub.
 sudo snap install microk8s --channel 1.34-strict/stable
 sudo usermod -aG snap_microk8s $USER
 newgrp snap_microk8s
-microk8s enable dns hostpath-storage
+sudo microk8s enable dns hostpath-storage
 ```
 
 Wait until all MicroK8s services report as running:
