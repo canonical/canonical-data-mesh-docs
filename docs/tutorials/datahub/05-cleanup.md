@@ -4,7 +4,21 @@
 
 When you are done experimenting, remove the tutorial deployment to free up resources.
 
-## Destroy the models
+## If you used the Multipass VM
+
+If you followed the {ref}`prerequisites <tutorial-datahub-index>` and ran this tutorial in the `datahub-tutorial` Multipass VM, deleting the VM removes everything at once, including Juju, MicroK8s, LXD, and all deployed charms:
+
+```bash
+multipass delete datahub-tutorial --purge
+```
+
+This is the fastest way to clean up and needs no further steps below.
+
+## If you ran this on your own machine
+
+If you ran the tutorial directly on a host rather than in a disposable VM, remove each piece individually instead.
+
+### Destroy the models
 
 Destroy both models, including their storage:
 
@@ -13,7 +27,7 @@ juju destroy-model -c microk8s datahub-k8s --destroy-storage --no-prompt
 juju destroy-model -c lxd datahub-vm --destroy-storage --no-prompt
 ```
 
-## Destroy the controllers
+### Destroy the controllers
 
 If you no longer need the Juju controllers:
 
@@ -22,7 +36,7 @@ juju destroy-controller microk8s --destroy-all-models --destroy-storage --no-pro
 juju destroy-controller lxd --destroy-all-models --destroy-storage --no-prompt
 ```
 
-## Remove the snaps
+### Remove the snaps
 
 To remove the tools installed for this tutorial:
 

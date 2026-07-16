@@ -64,6 +64,8 @@ Type `customers` in the DataHub search bar. The table appears as a dataset with:
 - The `demo` database and schema hierarchy for browsing
 - A place to add descriptions, owners, tags, and glossary terms
 
+![The customers dataset in DataHub search results, showing its column schema](../../media/datahub/search-customers-dataset.png)
+
 You have a working metadata catalog. The same flow applies to any PostgreSQL, and other connector types are available in the ingestion UI. For automatic, charm-managed ingestion of Trino catalogs, see {ref}`Integrate with Trino <how-to-datahub-integrate-with-trino>`.
 
 Continue to {ref}`clean up <tutorial-datahub-cleanup>`.
