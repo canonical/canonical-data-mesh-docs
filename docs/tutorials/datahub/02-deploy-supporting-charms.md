@@ -31,6 +31,14 @@ juju integrate kafka zookeeper
 juju integrate opensearch self-signed-certificates
 ```
 
+Check the relations with `juju status --relations`:
+
+```text
+Integration provider                   Requirer                       Interface           Type
+self-signed-certificates:certificates  opensearch:certificates        tls-certificates    regular
+zookeeper:zookeeper                    kafka:zookeeper                zookeeper           regular
+```
+
 Expose the client endpoints so applications in other models can reach them:
 
 ```bash

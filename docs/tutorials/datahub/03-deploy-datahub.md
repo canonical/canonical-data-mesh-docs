@@ -45,6 +45,16 @@ juju integrate datahub-k8s kafka-client
 juju integrate datahub-k8s os-client
 ```
 
+Check the relations with `juju status --relations`:
+
+```text
+Integration provider        Requirer               Interface           Type
+datahub-k8s:peer            datahub-k8s:peer       datahub             peer
+kafka-client:kafka-client   datahub-k8s:kafka      kafka_client        regular
+os-client:opensearch-client datahub-k8s:opensearch opensearch_client   regular
+pg-client:database          datahub-k8s:db         postgresql_client   regular
+```
+
 ## Wait for DataHub to initialize
 
 On first startup, the charm pulls three container images (actions, frontend, and GMS, around 1 GB combined), then DataHub prepares its database schema, creates its OpenSearch indices and Kafka topics, and runs a one-time system upgrade job before the services start. The image pulls are usually the bulk of the wait and depend heavily on network speed; the DataHub-specific setup that follows is comparatively fast. Expect up to 20 minutes on a normal connection, more on a slow one. You can watch progress with `juju status --watch 1s`.
