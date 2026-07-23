@@ -2,46 +2,56 @@
 
 # Architecture
 
-The Charmed Airbyte ecosystem consists of a number of charmed operators related together. The diagram below shows a high-level illustration of the charms and how they communicate.
+This page explains the components of a Charmed Airbyte deployment, how they fit together, and the design decisions behind the charm.
 
-![Diagram of the Charmed Airbyte deployment, showing the Airbyte charm relating to OAuth2 Proxy, Nginx Ingress Integrator, MinIO, Temporal, and Temporal Admin.](../../media/airbyte/architecture.png)
+## The Airbyte workloads
 
-## Airbyte
+The `airbyte-k8s` charm manages a single Kubernetes pod that runs Airbyte's services across several containers:
 
-The `airbyte-k8s` charm is the core component that runs the server, scheduler, and API. It uses MinIO as its object storage backend and relies on a PostgreSQL database for persistent data. The charm integrates with OAuth2 Proxy to provide authentication, stores blobs, logs, and state in MinIO, and exposes its services through the standard `ingress` interface, which can be served by any compatible ingress provider such as the Nginx Ingress Integrator or Traefik.
+- **airbyte-server** - the core application server. It exposes the Airbyte API and backs the UI.
+- **airbyte-workers** and **airbyte-workload-launcher** - execute synchronization jobs, launching and supervising the pods that run each connector.
+- **airbyte-workload-api-server** - the API that brokers work between the server and the workers.
+- **airbyte-bootloader** - runs once on startup to apply database migrations and initialize the deployment before the other services start.
+- **airbyte-cron**, **airbyte-pod-sweeper**, and **airbyte-connector-builder-server** - supporting services that handle scheduled housekeeping, clean up completed job pods, and back the low-code connector builder respectively.
 
-## OAuth2 Proxy
+## The backing services
 
-The OAuth2 Proxy charm protects Airbyte by providing authentication through OAuth providers such as Google OAuth, GitHub OAuth, or other SSO solutions. It acts as a reverse proxy in front of Airbyte and is exposed through the same Nginx Ingress Integrator that serves Airbyte itself.
+Airbyte keeps no durable state of its own; everything lives in three backing services, each provided by its own charm:
 
-## Nginx Ingress Integrator
+- **PostgreSQL** is the metadata store and the source of truth for connections, jobs, and configuration. The charm reaches it over the standard `postgresql_client` relation.
+- **Temporal** is the orchestration engine. It executes sync workflows, manages retries for failed operations, and coordinates the scheduling of long-running pipelines. The `temporal-admin-k8s` charm provides namespace administration and workflow debugging for it, and Temporal itself relates to PostgreSQL for its default and visibility stores.
+- **Object storage** (MinIO or an S3-compatible backend) holds job logs, state, and artifacts generated during synchronization.
 
-A single instance of the Nginx Ingress Integrator handles traffic for both Airbyte and OAuth2 Proxy. This ingress controller manages HTTP routing, performs TLS termination when a TLS secret is configured, enforces source-range allowlists, and handles timeout configuration for long-running requests.
+```mermaid
+graph LR
+    subgraph k8s [Kubernetes model]
+        NG[nginx-ingress-integrator]
+        O2P[oauth2-proxy]
+        AB[airbyte-k8s]
+        UI[airbyte-ui-k8s]
+        TMP[temporal-k8s]
+        TA[temporal-admin-k8s]
+        MIN[(MinIO)]
+        PG[(PostgreSQL)]
+    end
+    NG --> O2P
+    O2P --> AB
+    AB --> UI
+    AB -->|temporal-host config| TMP
+    AB --> MIN
+    AB --> PG
+    TMP --> PG
+    TA --> TMP
+```
 
-## MinIO
+## Why Temporal is reached by configuration, not a relation
 
-MinIO serves as the object storage backend for Airbyte, providing a scalable solution for storing state information, large log files, and job artifacts generated during data synchronization operations.
+Airbyte connects to Temporal through the `temporal-host` configuration option (default `temporal-k8s:7233`) rather than a Juju relation. This keeps the workflow backend interchangeable: the same charm can point at a Temporal deployed in the model, one shared across models, or an external Temporal service, without changing the relation topology. Temporal's own dependencies - PostgreSQL and the admin charm - are wired with relations as usual.
 
-## Temporal
+## Authentication happens at the edge
 
-The `temporal-k8s` charm is the orchestration engine that powers Airbyte's workflow execution. It handles job execution, manages retries for failed operations, coordinates the scheduling of synchronization tasks, and orchestrates long-running sync pipelines to ensure reliable data movement.
+Airbyte does not authenticate users itself. Instead, the `oauth2-proxy-k8s` charm sits in front of it as a reverse proxy and enforces authentication through an OAuth provider such as Google. Both Airbyte and OAuth2 Proxy are exposed through a single `nginx-ingress-integrator` instance, which handles HTTP routing, performs TLS termination when a TLS secret is configured, enforces source-range allowlists, and manages timeouts for long-running requests. Airbyte exposes only the standard `ingress` interface, so any compatible ingress provider - Nginx Ingress Integrator or Traefik - can serve it.
 
-Airbyte reaches Temporal through the `temporal-host` configuration option (default `temporal-k8s:7233`), not through a Juju relation. Temporal itself relates to PostgreSQL for its default and visibility stores, and to the Temporal Admin charm.
+## The Airbyte UI
 
-## Temporal Admin
-
-The `temporal-admin-k8s` charm provides administrative capabilities for the Temporal workflow engine, including namespace administration and workflow debugging tools to help monitor and troubleshoot synchronization operations.
-
-## Airbyte UI
-
-The charm provides the `airbyte-server` relation (`airbyte-server` interface), which delivers the Airbyte server's status to a related Airbyte UI application such as `airbyte-ui-k8s`. The UI provides connector configuration and monitoring, and is reached through the same ingress path as the server.
-
-## Observability
-
-The charm integrates with the [Canonical Observability Stack](https://charmhub.io/topics/canonical-observability-stack) (COS), typically through a related [`opentelemetry-collector-k8s`](https://charmhub.io/opentelemetry-collector-k8s) charm, over three relations:
-
-- `logging` (`loki_push_api`) forwards logs from all Airbyte containers to Loki.
-- `grafana-dashboard` (`grafana_dashboard`) provisions the log-based **Airbyte** dashboard.
-- `send-otlp` (`otlp`) sends Airbyte's Micrometer metrics to the collector's OTLP endpoint.
-
-The dashboard derives its health signals from the forwarded logs. The metrics path is wired but carries no data on Airbyte's community edition, where application metrics are gated behind Airbyte Enterprise. For details, see the {ref}`Observability reference <reference-airbyte-observability>`.
+The charm provides the `airbyte-server` relation (`airbyte-server` interface), which delivers the Airbyte server's status to a related UI application such as `airbyte-ui-k8s`. The UI provides connector configuration and monitoring, and is reached through the same ingress path as the server.
