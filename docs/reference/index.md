@@ -20,4 +20,5 @@ requirements
 :maxdepth: 1
 
 DataHub <datahub/index>
+Airbyte <airbyte/index>
 ```

@@ -10,7 +10,7 @@ The Canonical Data Mesh is composed of the following charmed operators.
 | Superset | Self-service analytics: SQL exploration, charts, and dashboards. | [superset-k8s](https://charmhub.io/superset-k8s) |
 | Ranger | Fine-grained access policies and audit for the query layer. | [ranger-k8s](https://charmhub.io/ranger-k8s) |
 | DataHub | Metadata catalog: discovery, ownership, and lineage. See the {ref}`DataHub reference <reference-datahub-index>`. | [datahub-k8s](https://charmhub.io/datahub-k8s) |
-| Airbyte | Connector-based data ingestion from SaaS applications, databases, files, and APIs. | [airbyte-k8s](https://charmhub.io/airbyte-k8s) |
+| Airbyte | Connector-based data ingestion from SaaS applications, databases, files, and APIs. See the {ref}`Airbyte reference <reference-airbyte-index>`. | [airbyte-k8s](https://charmhub.io/airbyte-k8s) |
 | Temporal | Workflow orchestration for ingestion and governance tasks. | [temporal-k8s](https://charmhub.io/temporal-k8s) |
 | PostgreSQL | Relational storage for platform metadata and ingested data. | [postgresql-k8s](https://charmhub.io/postgresql-k8s) |
 | MinIO | S3-compatible object storage for logs, state, and large datasets. | [minio](https://charmhub.io/minio) |

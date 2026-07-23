@@ -38,4 +38,5 @@ catalog-and-discover-data
 :maxdepth: 1
 
 DataHub <datahub/index>
+Airbyte <airbyte/index>
 ```
