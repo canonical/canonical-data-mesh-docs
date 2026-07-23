@@ -19,4 +19,5 @@ governance-model
 :maxdepth: 1
 
 DataHub architecture <datahub/architecture>
+Airbyte architecture <airbyte/architecture>
 ```
