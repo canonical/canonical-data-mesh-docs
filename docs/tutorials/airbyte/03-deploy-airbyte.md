@@ -26,50 +26,48 @@ database relation not ready
 
 You add the relations in the next steps.
 
-## Integrate Airbyte with MinIO
-
-Airbyte requires object storage for logs, artifacts, and state. Add the relation between MinIO and Airbyte:
-
-```bash
-juju relate minio airbyte-k8s
-```
-
-Expected status after the relation settles:
-
-```text
-airbyte-k8s/0: active | waiting for database connection
-```
-
 ## Integrate Airbyte with PostgreSQL
 
 Airbyte depends on PostgreSQL to store metadata, configuration, and job history. Add the relation between PostgreSQL and Airbyte:
 
 ```bash
-juju relate postgresql-k8s airbyte-k8s
+juju integrate postgresql-k8s airbyte-k8s
 ```
 
-Airbyte transitions to a new blocked state until Temporal is related:
+The database relation is satisfied, and Airbyte moves on to check its object storage:
 
 ```text
-temporal relation not ready
+minio relation not ready
 ```
 
-## Integrate Airbyte with Temporal
+## Integrate Airbyte with MinIO
 
-Airbyte depends on two Temporal charms:
+Airbyte requires object storage for logs, artifacts, and state. Add the relation between MinIO and Airbyte:
 
-- `temporal-k8s` — the Temporal workflow engine
-- `temporal-admin-k8s` — provides UI and admin capabilities
+```bash
+juju integrate minio airbyte-k8s
+```
+
+With both PostgreSQL and MinIO related, the `airbyte-bootloader` container runs its one-time initialization; you may briefly see `waiting for airbyte-auth-secrets` while it creates the auth secret, after which `airbyte-k8s/0` settles to `active`.
+
+## Set up Temporal
+
+Airbyte offloads workflow execution to Temporal. It reaches Temporal through the `temporal-host` configuration option (default `temporal-k8s:7233`), not through a Juju relation, so there is no direct Airbyte-to-Temporal integration to add. You only need Temporal itself to be operational, which means relating it to its own backends:
+
+- `temporal-k8s` — the Temporal workflow engine, which stores its default and visibility data in PostgreSQL
+- `temporal-admin-k8s` — registers the Temporal namespace and provides admin capabilities
 
 Add the relations:
 
 ```bash
-juju relate temporal-k8s:db postgresql-k8s:database
-juju relate temporal-k8s:visibility postgresql-k8s:database
-juju relate temporal-k8s:admin temporal-admin-k8s:admin
+juju integrate temporal-k8s:db postgresql-k8s:database
+juju integrate temporal-k8s:visibility postgresql-k8s:database
+juju integrate temporal-k8s:admin temporal-admin-k8s:admin
 ```
 
-After all relations and configurations are applied, check the status:
+Because Airbyte's default `temporal-host` already points at `temporal-k8s:7233`, Airbyte connects to Temporal automatically once Temporal reaches `active`.
+
+After all relations are applied, check the status:
 
 ```bash
 juju status
@@ -83,7 +81,6 @@ airbyte-model  airbyte-controller  microk8s/localhost  3.6.11   unsupported  14:
 
 App                   Version                Status  Scale  Charm                   Channel          Rev  Address   Exposed  Message
 airbyte-k8s           v1.7.0                 active      1  airbyte-k8s             latest/edge       18  10.x.x.x  no
-airbyte-webhooks-k8s                         active      1  airbyte-webhooks-charm  latest/edge       12  10.x.x.x  no
 minio                 res:oci-image@7f2474f  active      1  minio                   ckf-1.10/stable  459  10.x.x.x  no
 temporal-admin-k8s    1.23.1                 active      1  temporal-admin-k8s      latest/edge       13  10.x.x.x  no
 temporal-k8s          1.23.1                 active      1  temporal-k8s            latest/edge       45  10.x.x.x  no
@@ -105,8 +102,4 @@ temporal-admin-k8s:peer   temporal-admin-k8s:peer   temporal-admin     peer
 temporal-k8s:peer         temporal-k8s:peer         temporal           peer
 ```
 
-## Next steps
-
-- Follow {ref}`Secure Airbyte deployments <how-to-airbyte-secure-deployments>` to add TLS and authentication to your deployment.
-- Read the {ref}`Airbyte architecture <explanation-airbyte-architecture>` explanation to understand the components behind what you just deployed.
-- Check the {ref}`Airbyte reference <reference-airbyte-index>` for system requirements and Charmhub-generated configuration details.
+Charmed Airbyte is up and running. Continue to {ref}`run your first sync <tutorial-airbyte-run-a-sync>`.

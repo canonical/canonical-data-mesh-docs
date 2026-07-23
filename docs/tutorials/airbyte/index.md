@@ -23,6 +23,8 @@ Before you begin, make sure the machine has:
 1. {ref}`Set up your environment <tutorial-airbyte-environment-setup>`: install MicroK8s and Juju, and bootstrap the controller and model this tutorial uses.
 2. {ref}`Deploy supporting charms <tutorial-airbyte-deploy-supporting-charms>`: deploy PostgreSQL, MinIO, and Temporal.
 3. {ref}`Deploy Charmed Airbyte <tutorial-airbyte-deploy-airbyte>`: deploy Airbyte and integrate it with its supporting charms.
+4. {ref}`Run your first sync <tutorial-airbyte-run-a-sync>`: open the UI and move data with Airbyte's built-in test connectors.
+5. {ref}`Clean up <tutorial-airbyte-cleanup>`
 
 ```{toctree}
 :hidden:
@@ -31,4 +33,6 @@ Before you begin, make sure the machine has:
 01-environment-setup
 02-deploy-supporting-charms
 03-deploy-airbyte
+04-run-a-sync
+05-cleanup
 ```

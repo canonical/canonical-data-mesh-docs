@@ -130,7 +130,7 @@ juju config oauth2-proxy-k8s --file=path/to/oauth2-proxy.yaml
 Relate the OAuth2 Proxy with the Nginx Ingress Integrator to expose it through the ingress:
 
 ```bash
-juju relate oauth2-proxy-k8s nginx-ingress-integrator
+juju integrate oauth2-proxy-k8s nginx-ingress-integrator
 ```
 
 This updates the running `oauth2-proxy` unit and enforces Google OAuth in front of Airbyte.
