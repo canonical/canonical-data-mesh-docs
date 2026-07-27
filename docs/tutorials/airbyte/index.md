@@ -18,6 +18,8 @@ Before you begin, make sure the machine has:
 - 2 CPU cores
 - At least 20 GB of available disk space
 
+Charmed Airbyte requires Juju 3.1 or later. This tutorial installs Juju 3.6, so there is nothing to set up in advance.
+
 ## Tutorial steps
 
 1. {ref}`Set up your environment <tutorial-airbyte-environment-setup>`: install MicroK8s and Juju, and bootstrap the controller and model this tutorial uses.

@@ -9,7 +9,7 @@ These guides cover common operational tasks and configurations for Airbyte. They
 ```{toctree}
 :maxdepth: 1
 
-secure-airbyte-deployments
+secure-deployments
 ```
 
 ## Observability

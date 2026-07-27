@@ -45,4 +45,4 @@ The sync appears in the connection's **Job History** as **Running**, then **Succ
 
 You now have a working Charmed Airbyte deployment and have run a sync end to end. The same flow applies to real connectors: swap the test source and destination for any of the hundreds in Airbyte's catalog.
 
-Continue to {ref}`clean up <tutorial-airbyte-cleanup>`.
+While the deployment is still running, this is a good moment to explore the {ref}`Airbyte how-to guides <how-to-airbyte-index>`, which cover securing and observing your deployment. When you are finished, continue to {ref}`clean up <tutorial-airbyte-cleanup>`.

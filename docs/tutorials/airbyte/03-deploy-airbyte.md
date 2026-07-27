@@ -20,7 +20,8 @@ juju status --watch 2s
 
 Initially, Airbyte is in a `blocked` state with a message such as:
 
-```text
+```{terminal}
+:output-only:
 database relation not ready
 ```
 
@@ -36,7 +37,8 @@ juju integrate postgresql-k8s airbyte-k8s
 
 The database relation is satisfied, and Airbyte moves on to check its object storage:
 
-```text
+```{terminal}
+:output-only:
 minio relation not ready
 ```
 
@@ -75,7 +77,8 @@ juju status
 
 All applications (`airbyte-k8s`, `temporal-k8s`, `temporal-admin-k8s`, `postgresql-k8s`, `minio`) should eventually show `active` status. At this point, Airbyte is fully operational:
 
-```text
+```{terminal}
+:output-only:
 Model          Controller          Cloud/Region        Version  SLA          Timestamp
 airbyte-model  airbyte-controller  microk8s/localhost  3.6.11   unsupported  14:00:29+03:00
 

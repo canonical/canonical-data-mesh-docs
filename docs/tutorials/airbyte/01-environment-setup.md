@@ -39,10 +39,6 @@ Install `juju` from a snap:
 sudo snap install juju --channel 3.6/stable
 ```
 
-```{note}
-This charm requires Juju 3.1 or later.
-```
-
 Since the Juju package is strictly confined, manually create the path it expects:
 
 ```bash
@@ -51,7 +47,8 @@ mkdir -p ~/.local/share
 
 Juju recognises a MicroK8s cloud automatically, as you can see by running `juju clouds`:
 
-```text
+```{terminal}
+:output-only:
 Cloud      Regions  Default    Type  Credentials  Source    Description
 localhost  1        localhost  lxd   0            built-in  LXD Container Hypervisor
 microk8s   1        localhost  k8s   1            built-in  A Kubernetes Cluster
@@ -73,7 +70,8 @@ juju add-model airbyte-model
 
 After this, `juju status` shows something similar to:
 
-```text
+```{terminal}
+:output-only:
 Model          Controller          Cloud/Region        Version  SLA          Timestamp
 airbyte-model  airbyte-controller  microk8s/localhost  3.6.12   unsupported  12:45:50+03:00
 

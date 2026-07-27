@@ -52,7 +52,7 @@ For self-signed certificates, do the following:
    ```
 
 ```{note}
-If you have a production-grade certificate, skip to step 3.
+If you already have a production-grade certificate, skip the certificate generation (steps 1 and 2) and go straight to step 3, where you add it as a Kubernetes secret.
 ```
 
 Validate that your ingress has been created with the TLS certificates:
