@@ -37,16 +37,12 @@ graph LR
     NG --> O2P
     O2P --> AB
     AB --> UI
-    AB -->|temporal-host config| TMP
+    AB --> TMP
     AB --> MIN
     AB --> PG
     TMP --> PG
     TA --> TMP
 ```
-
-## Why Temporal is reached by configuration
-
-Airbyte connects to Temporal through the `temporal-host` configuration option (default `temporal-k8s:7233`) rather than a Juju relation. This keeps the workflow backend interchangeable: the same charm can point at a Temporal deployed in the model, one shared across models, or an external Temporal service, without changing the relation topology. Temporal's own dependencies - PostgreSQL and the admin charm - are wired with relations as usual.
 
 ## Authentication happens at the edge
 

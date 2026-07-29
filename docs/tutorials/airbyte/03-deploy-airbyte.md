@@ -54,7 +54,7 @@ With both PostgreSQL and MinIO related, the `airbyte-bootloader` container runs 
 
 ## Set up Temporal
 
-Airbyte offloads workflow execution to Temporal. It reaches Temporal through the `temporal-host` configuration option (default `temporal-k8s:7233`), not through a Juju relation, so there is no direct Airbyte-to-Temporal integration to add. You only need Temporal itself to be operational, which means relating it to its own backends:
+Airbyte offloads workflow execution to Temporal, so Temporal must be operational before Airbyte can run syncs. Airbyte is already configured to reach Temporal at `temporal-k8s:7233` by default, so there is nothing to configure on the Airbyte side. You only need to bring Temporal up by relating it to its own backends:
 
 - `temporal-k8s` — the Temporal workflow engine, which stores its default and visibility data in PostgreSQL
 - `temporal-admin-k8s` — registers the Temporal namespace and provides admin capabilities
@@ -67,7 +67,7 @@ juju integrate temporal-k8s:visibility postgresql-k8s:database
 juju integrate temporal-k8s:admin temporal-admin-k8s:admin
 ```
 
-Because Airbyte's default `temporal-host` already points at `temporal-k8s:7233`, Airbyte connects to Temporal automatically once Temporal reaches `active`.
+Once Temporal reaches `active`, Airbyte connects to it automatically.
 
 After all relations are applied, check the status:
 
