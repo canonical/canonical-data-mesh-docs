@@ -12,7 +12,8 @@ MicroK8s is a lightweight Kubernetes distribution that runs on a single host. In
 sudo snap install microk8s --channel 1.34-strict/stable
 sudo usermod -aG snap_microk8s $USER
 newgrp snap_microk8s
-sudo microk8s enable dns hostpath-storage
+sudo microk8s enable dns
+sudo microk8s enable hostpath-storage
 ```
 
 Wait until all MicroK8s services report as running:

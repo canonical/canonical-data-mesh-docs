@@ -71,6 +71,14 @@ Find the unit's IP address in the `Address` column of the `superset-k8s/0` unit,
 http://<UNIT_ADDRESS>:8088
 ```
 
+With the Multipass setup, that address is only routable from inside the VM. 
+Either browse from `multipass shell superset-tutorial`, or forward the port out of the VM:
+
+```shell
+# Run inside the VM. `multipass list` gives the VM address to then browse from the host.
+microk8s kubectl port-forward -n superset-k8s pod/superset-k8s-0 9002:9002 --address 0.0.0.0
+```
+
 Log in with the username `admin` and the password you set at deploy time.
 
 ```{note}
