@@ -20,4 +20,7 @@ requirements
 :maxdepth: 1
 
 DataHub <datahub/index>
+Superset <superset/index>
+Trino <trino/index>
+Ranger <ranger/index>
 ```

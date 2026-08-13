@@ -19,4 +19,7 @@ governance-model
 :maxdepth: 1
 
 DataHub architecture <datahub/architecture>
+Superset architecture <superset/architecture>
+Trino architecture <trino/architecture>
+Ranger architecture <ranger/architecture>
 ```
