@@ -134,4 +134,17 @@ uppercasing
 MBeans
 Dropwizard
 datasource
+Redis
+Celery
+Gunicorn
+StatsD
+Playwright
+Chromium
+nginx
+Handlebars
+usersync
+sanitiz(e|es|ed|ing|ation)
+replan(s|ned|ning)?
+misconfiguration(s)?
+routable
 

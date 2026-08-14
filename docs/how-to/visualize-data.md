@@ -13,3 +13,5 @@ Planned outline:
 - Query Trino catalogs in SQL Lab.
 - Build charts and dashboards from federated queries.
 - Understand permission-denied messages and request access to restricted data.
+
+In the meantime, see the {ref}`Superset how-to guides <how-to-superset-index>`, starting with {ref}`Integrate with Trino <how-to-superset-integrate-with-trino>`.
