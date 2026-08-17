@@ -4,12 +4,13 @@
 
 These guides cover common operational tasks and configurations for Airbyte. They assume a working deployment; to build one from scratch, start with the {ref}`Airbyte tutorial <tutorial-airbyte-index>`.
 
-## Security
+## Deployment and access
 
 ```{toctree}
 :maxdepth: 1
 
-secure-deployments
+expose-with-ingress
+enable-google-oauth
 ```
 
 ## Observability

@@ -27,9 +27,9 @@ juju deploy opentelemetry-collector-k8s --channel 2/stable --trust opentelemetry
 Relate each of Airbyte's three observability endpoints to the matching collector endpoint:
 
 ```bash
-juju integrate airbyte-k8s:logging          opentelemetry-collector:receive-loki-logs
+juju integrate airbyte-k8s:logging           opentelemetry-collector:receive-loki-logs
 juju integrate airbyte-k8s:grafana-dashboard opentelemetry-collector:grafana-dashboards-consumer
-juju integrate airbyte-k8s:send-otlp        opentelemetry-collector:receive-otlp
+juju integrate airbyte-k8s:send-otlp         opentelemetry-collector:receive-otlp
 ```
 
 Check the wiring with `juju status --relations`:

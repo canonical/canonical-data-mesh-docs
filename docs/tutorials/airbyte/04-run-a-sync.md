@@ -14,8 +14,9 @@ http://<UNIT_ADDRESS>:8001
 
 ```{note}
 Accessing the unit IP directly is fine for a local tutorial. For anything
-beyond that, put Airbyte behind an ingress with TLS and authentication - see
-{ref}`Secure Airbyte deployments <how-to-airbyte-secure-deployments>`.
+beyond that, put Airbyte behind an ingress with TLS - see
+{ref}`Expose Airbyte with ingress <how-to-airbyte-expose-with-ingress>` - and
+add authentication with {ref}`Enable Google OAuth <how-to-airbyte-enable-google-oauth>`.
 ```
 
 ## Set up a test source
