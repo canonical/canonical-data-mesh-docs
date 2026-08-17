@@ -39,4 +39,7 @@ catalog-and-discover-data
 
 DataHub <datahub/index>
 Airbyte <airbyte/index>
+Superset <superset/index>
+Trino <trino/index>
+Ranger <ranger/index>
 ```
