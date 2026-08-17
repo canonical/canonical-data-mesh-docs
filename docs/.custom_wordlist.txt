@@ -150,4 +150,5 @@ routable
 MCP
 URN(s)?
 loopback
+Streamable
 

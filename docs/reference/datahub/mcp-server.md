@@ -19,7 +19,7 @@
 | Route | Authentication | Description |
 |---|---|---|
 | `/mcp` | Bearer token, when an identity provider is related | The MCP endpoint. `POST` only; `GET` returns `405`. |
-| `/health` | None | Liveness route, also used by the Pebble check. |
+| `/health` | None | Health route, also used by the Pebble check. |
 | `/.well-known/oauth-protected-resource/mcp` | None | [RFC 9728](https://datatracker.ietf.org/doc/html/rfc9728) resource metadata, naming the authorization server. Advertised in the `WWW-Authenticate` header of a `401`. |
 | `/.well-known/oauth-authorization-server` | None | [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414) metadata, served only when the charm fronts Google as an OAuth proxy. |
 | `/auth/callback` | None | Redirect URI of the OAuth proxy, served only when the charm fronts Google. This is the one URI to register on the Google client. |
@@ -63,7 +63,7 @@ The DataHub charm creates one service account per `datahub-client` relation:
 | Resource | Naming pattern | Notes |
 |---|---|---|
 | Service account | `[juju] <app>-<relation-id>` | Created with no privileges of its own; inherits the DataHub default all-users policies, which grant metadata read. |
-| Access token | Non-expiring, passed in a Juju secret granted to the relation | Never written to a databag, to charm configuration, or to the logs. Deleted with the service account when the relation is removed. |
+| Access token | Non-expiring, passed in a Juju secret granted to the relation | Never written to relation data, to charm configuration, or to the logs. Deleted with the service account when the relation is removed. |
 
 ## Scaling
 

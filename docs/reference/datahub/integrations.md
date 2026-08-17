@@ -41,7 +41,7 @@ Through the `trino-catalog` and `datahub-client` integrations, the charm creates
 | Ingestion sources | `[juju] <catalog>-ingestion` | `[juju] sales-ingestion` |
 | Per-catalog password secrets | `JUJU_MANAGED_TRINO_PASSWORD_<NORMALIZED_CATALOG>` | catalog `my-catalog.test` becomes `JUJU_MANAGED_TRINO_PASSWORD_MY_CATALOG_TEST` |
 | GMS access token secret | `JUJU_MANAGED_GMS_TOKEN` | - |
-| Service accounts for `datahub-client` requirers | `[juju] <app>-<relation-id>` | `[juju] datahub-mcp-k8s-7` |
+| Service accounts for `datahub-client` consumers | `[juju] <app>-<relation-id>` | `[juju] datahub-mcp-k8s-7` |
 
 Catalog names are normalized by uppercasing and replacing non-alphanumeric characters with `_`. When a catalog is removed or the Trino relation is broken, the corresponding ingestion sources and secrets are deleted automatically; ingested metadata is preserved.
 

@@ -21,7 +21,7 @@ juju integrate datahub-mcp-k8s:datahub-client datahub-k8s:datahub-client
 
 The MCP server stays `blocked` until DataHub publishes the access token, then goes `active`.
 
-On this relation, the DataHub charm creates a service account dedicated to the relation, mints a non-expiring access token for it, and passes the token in a Juju secret together with the GMS URL. The token never appears in a databag or in the charm's configuration, and removing the relation deletes the service account, which invalidates the token. See {ref}`Integrations <reference-datahub-integrations>` for the naming convention of the charm-managed resources.
+On this relation, the DataHub charm creates a service account dedicated to the relation, mints a non-expiring access token for it, and passes the token in a Juju secret together with the GMS URL. The token never appears in relation data or in the charm's configuration, and removing the relation deletes the service account, which invalidates the token. See {ref}`Integrations <reference-datahub-integrations>` for the naming convention of the charm-managed resources.
 
 The service account holds no privileges of its own; it inherits the DataHub default all-users policies, which grant metadata read. If your deployment has narrowed those policies, grant the service account a read-only metadata policy in DataHub, otherwise the tools return no results.
 
@@ -58,7 +58,7 @@ The server stays `blocked`, with the workload stopped, until the provider has re
 
 How callers obtain credentials depends on the provider.
 
-### Option A: A provider that registers clients itself
+### Option A: Providers that register clients themselves
 
 Against a provider that publishes a `registration_endpoint` (Hydra, and therefore the [Canonical Identity Platform](https://charmhub.io/topics/canonical-identity-platform)) the MCP server is a plain OAuth 2.1 resource server. Clients register themselves, and the server only verifies the tokens they arrive with:
 
