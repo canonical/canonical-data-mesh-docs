@@ -147,4 +147,7 @@ sanitiz(e|es|ed|ing|ation)
 replan(s|ned|ning)?
 misconfiguration(s)?
 routable
+MCP
+URN(s)?
+loopback
 
