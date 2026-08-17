@@ -14,6 +14,10 @@ Deploy it:
 juju deploy nginx-ingress-integrator --trust
 ```
 
+```{note}
+This guide uses self-signed certificates, which suit a local or test deployment. For production, obtain certificates from an ACME provider such as [Lego](https://charmhub.io/lego) and integrate it with `nginx-ingress-integrator` over the `certificates` interface instead of creating the Kubernetes secret manually.
+```
+
 ### Use Kubernetes secrets
 
 You can use a self-signed or production-grade TLS certificate stored in a Kubernetes secret. The secret is then associated with the ingress to encrypt traffic between clients and Airbyte.
@@ -82,10 +86,14 @@ Enabling Google OAuth for Charmed Airbyte lets users authenticate with their Goo
 
 ### Deploy OAuth2 Proxy
 
-Deploy the OAuth2 Proxy charm:
+Deploy the OAuth2 Proxy charm, pinned to revision 4:
 
 ```bash
-juju deploy oauth2-proxy-k8s --channel 0.1/stable
+juju deploy oauth2-proxy-k8s --channel latest/edge --revision 4
+```
+
+```{note}
+Stay on revision 4. Later revisions re-architect the charm around the [Canonical Identity Platform](https://charmhub.io/topics/canonical-identity-platform): they drop the `nginx-route` interface which this guide relates over, drop the `authenticated-emails-list` allowlist, and move authentication to an `oauth`/IdP relation. Airbyte supports only basic authentication, not OIDC, so it depends on OAuth2 Proxy for Google authentication and on the allowlist to restrict who can sign in. Bumping the revision will break the deployment.
 ```
 
 ### Obtain OAuth2 credentials
@@ -106,18 +114,18 @@ The `oauth2-proxy-k8s` charm manages all OAuth configuration for Airbyte. Create
 
 ```yaml
 oauth2-proxy-k8s:
-  client_id: "<GOOGLE_CLIENT_ID>"
-  client_secret: "<GOOGLE_CLIENT_SECRET>"
-  cookie_secret: "<RANDOM_32_BYTE_SECRET>"
-  external_hostname: "airbyte.company.com"
-  authenticated_emails_list: "user1@company.com,user2@company.com,<SERVICE_ACCOUNT>"
-  additional_config: "--upstream-timeout=1200s --skip-jwt-bearer-tokens=true --extra-jwt-issuers=https://accounts.google.com=<GOOGLE_CLIENT_ID>"
+  client-id: "<GOOGLE_CLIENT_ID>"
+  client-secret: "<GOOGLE_CLIENT_SECRET>"
+  cookie-secret: "<RANDOM_32_BYTE_SECRET>"
+  external-hostname: "airbyte.company.com"
+  authenticated-emails-list: "user1@company.com,user2@company.com,<SERVICE_ACCOUNT>"
+  additional-config: "--upstream-timeout=1200s --skip-jwt-bearer-tokens=true --extra-jwt-issuers=https://accounts.google.com=<GOOGLE_CLIENT_ID>"
   upstream: "http://airbyte-k8s:8001"
 ```
 
-- `cookie_secret` must be a 32-byte base64-encoded value.
-- `external_hostname` must match what Google OAuth expects.
-- `authenticated_emails_list` controls who can access Airbyte.
+- `cookie-secret` must be a 32-byte base64-encoded value.
+- `external-hostname` must match what Google OAuth expects.
+- `authenticated-emails-list` controls who can access Airbyte.
 
 Apply the configuration:
 
@@ -127,10 +135,10 @@ juju config oauth2-proxy-k8s --file=path/to/oauth2-proxy.yaml
 
 ### Relate OAuth2 Proxy with Nginx Ingress Integrator
 
-Relate the OAuth2 Proxy with the Nginx Ingress Integrator to expose it through the ingress:
+Relate the OAuth2 Proxy with the Nginx Ingress Integrator over the `nginx-route` interface to expose it through the ingress:
 
 ```bash
-juju integrate oauth2-proxy-k8s nginx-ingress-integrator
+juju integrate oauth2-proxy-k8s:nginx-route nginx-ingress-integrator:nginx-route
 ```
 
 This updates the running `oauth2-proxy` unit and enforces Google OAuth in front of Airbyte.
