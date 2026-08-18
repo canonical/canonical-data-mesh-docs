@@ -2,7 +2,7 @@
 
 # Deploy the MCP server
 
-This guide describes how to extend a DataHub deployment with the [DataHub MCP server](https://charmhub.io/datahub-mcp-k8s), which exposes the catalog to LLM agents over the [Model Context Protocol](https://modelcontextprotocol.io/). Agents can then search datasets, walk lineage, read schemas and glossary terms, and inspect the queries that run against a dataset, grounded in the catalog rather than in the model's training data.
+This guide describes how to extend a DataHub deployment with the [DataHub MCP server](https://charmhub.io/datahub-mcp-k8s), which exposes the catalog to LLM agents over the [Model Context Protocol](https://modelcontextprotocol.io/). Agents can then search datasets, walk lineage, read schemas and glossary terms, and inspect the queries that run against a dataset, grounded in the catalog rather than in the model's training data. See {ref}`MCP server <reference-datahub-mcp-server>` for the full tool set.
 
 The MCP server is an optional companion to DataHub, deployed as its own application and related to `datahub-k8s`. Nothing else in the deployment changes when it is added or removed.
 
