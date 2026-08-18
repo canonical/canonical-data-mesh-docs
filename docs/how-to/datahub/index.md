@@ -11,6 +11,7 @@ These guides cover common operational tasks and configurations for DataHub. They
 
 expose-with-ingress
 enable-sso
+deploy-the-mcp-server
 deploy-with-terraform
 configure-model-proxies
 ```
