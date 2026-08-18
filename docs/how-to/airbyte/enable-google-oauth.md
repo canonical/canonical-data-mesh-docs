@@ -27,44 +27,16 @@ OAuth2 Proxy is exposed through the Nginx Ingress Integrator, which also termina
 juju deploy nginx-ingress-integrator --trust
 ```
 
-```{note}
-This guide uses self-signed certificates, which suit a local or test deployment. For production, obtain certificates from an ACME provider such as [Lego](https://charmhub.io/lego) and integrate it with `nginx-ingress-integrator` over the `certificates` interface instead of creating the Kubernetes secret manually.
+## Enable TLS
+
+Google OAuth requires the redirect URL to use HTTPS, so terminate TLS at the ingress by integrating the Nginx Ingress Integrator with a certificates provider over the `certificates` interface. It requests a certificate for the hostname OAuth2 Proxy advertises through its `external-hostname` config. For a local environment, use [self-signed certificates](https://charmhub.io/self-signed-certificates):
+
+```bash
+juju deploy self-signed-certificates --channel latest/stable
+juju integrate nginx-ingress-integrator:certificates self-signed-certificates:certificates
 ```
 
-## Set up TLS
-
-Google OAuth requires the redirect URL to use HTTPS, so terminate TLS at the ingress. You can use a self-signed or production-grade TLS certificate stored in a Kubernetes secret.
-
-For self-signed certificates, do the following:
-
-1. Generate a private key with `openssl`, then a certificate signing request using that key. Replace `<YOUR_HOSTNAME>` with an appropriate hostname such as `airbyte-k8s.com`:
-
-   ```bash
-   openssl genrsa -out server.key 2048
-   openssl req -new -key server.key -out server.csr -subj "/CN=<YOUR_HOSTNAME>"
-   ```
-
-2. Sign the signing request to create your self-signed certificate:
-
-   ```bash
-   openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt -extfile <(printf "subjectAltName=DNS:<YOUR_HOSTNAME>")
-   ```
-
-3. Add this certificate and key as a Kubernetes secret for the ingress to use:
-
-   ```bash
-   kubectl create secret tls airbyte-tls --cert=server.crt --key=server.key
-   ```
-
-   ```{note}
-   If you already have a production-grade certificate, skip the certificate generation (steps 1 and 2) and go straight to this step, where you add it as a Kubernetes secret.
-   ```
-
-4. Configure the ingress provider with the Kubernetes secret and the hostname from the certificate:
-
-   ```bash
-   juju config nginx-ingress-integrator tls-secret-name=airbyte-tls service-hostname=<YOUR_HOSTNAME>
-   ```
+For production, use an ACME provider such as [Lego](https://charmhub.io/lego) instead.
 
 ## Deploy OAuth2 Proxy
 
@@ -75,7 +47,7 @@ juju deploy oauth2-proxy-k8s --channel latest/edge --revision 4
 ```
 
 ```{note}
-Stay on revision 4. Later revisions re-architect the charm around the [Canonical Identity Platform](https://charmhub.io/topics/canonical-identity-platform): they drop the `nginx-route` interface which this guide relates over, drop the `authenticated-emails-list` allowlist, and move authentication to an `oauth`/IdP relation. Airbyte supports only basic authentication, not OIDC, so it depends on OAuth2 Proxy for Google authentication and on the allowlist to restrict who can sign in. Bumping the revision will break the deployment.
+Stay on revision 4. Later revisions re-architect the charm around the [Canonical Identity Platform](https://charmhub.io/topics/canonical-identity-platform): they drop the `nginx-route` interface which this guide relates over, drop the `authenticated-emails-list` allowlist that restricts who can sign in, and move authentication to an `oauth`/IdP relation that Airbyte cannot use. Bumping the revision will break the deployment.
 ```
 
 ## Obtain OAuth2 credentials
@@ -126,26 +98,5 @@ juju integrate oauth2-proxy-k8s:nginx-route nginx-ingress-integrator:nginx-route
 This updates the running `oauth2-proxy` unit and enforces Google OAuth in front of Airbyte.
 
 ## Verify
-
-Validate that your ingress has been created with the TLS certificate:
-
-```bash
-kubectl get ingress
-kubectl describe <YOUR_INGRESS_NAME>
-```
-
-The `describe` command shows something similar to the following, with the Kubernetes secret you configured under `TLS`:
-
-```text
-Name:             relation-201-airbyte-k8s-com-ingress
-Labels:           app.juju.is/created-by=nginx-ingress-integrator
-                  nginx-ingress-integrator.charm.juju.is/managed-by=nginx-ingress-integrator
-Namespace:        airbyte-model
-Address:          <list-of-ips>
-Ingress Class:    nginx-ingress-controller
-Default backend:  <default>
-TLS:
-  airbyte-tls terminates airbyte-k8s.com
-```
 
 Open the external hostname in a browser. Airbyte now prompts for Google sign-in, and only the accounts in `authenticated-emails-list` can reach it.
