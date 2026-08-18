@@ -30,16 +30,18 @@ All three are commonly consumed as cross-model offers, since OpenSearch runs on 
 |---|---|---|
 | `metrics-endpoint` | `prometheus_scrape` | Prometheus scrape configuration for the GMS and frontend JMX exporters. |
 | `grafana-dashboard` | `grafana_dashboard` | Ships the "DataHub Monitoring" dashboard to Grafana. |
+| `datahub-client` | `datahub_client` | GMS URL and a dedicated service account token, consumed by charms that call the DataHub API on their own behalf, such as [datahub-mcp-k8s](https://charmhub.io/datahub-mcp-k8s). One service account per relation. |
 
 ## Charm-managed resources in DataHub
 
-Through the Trino integration, the charm creates resources inside DataHub. They are identifiable by naming convention, and user-created resources that do not match these patterns are never touched:
+Through the `trino-catalog` and `datahub-client` integrations, the charm creates resources inside DataHub. They are identifiable by naming convention, and user-created resources that do not match these patterns are never touched:
 
 | Resource | Naming pattern | Example |
 |---|---|---|
 | Ingestion sources | `[juju] <catalog>-ingestion` | `[juju] sales-ingestion` |
 | Per-catalog password secrets | `JUJU_MANAGED_TRINO_PASSWORD_<NORMALIZED_CATALOG>` | catalog `my-catalog.test` becomes `JUJU_MANAGED_TRINO_PASSWORD_MY_CATALOG_TEST` |
 | GMS access token secret | `JUJU_MANAGED_GMS_TOKEN` | - |
+| Service accounts for `datahub-client` consumers | `[juju] <app>-<relation-id>` | `[juju] datahub-mcp-k8s-7` |
 
 Catalog names are normalized by uppercasing and replacing non-alphanumeric characters with `_`. When a catalog is removed or the Trino relation is broken, the corresponding ingestion sources and secrets are deleted automatically; ingested metadata is preserved.
 
