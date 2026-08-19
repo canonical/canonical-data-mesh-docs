@@ -15,6 +15,7 @@ get-started
 ## Components
 
 - {ref}`Charmed DataHub <tutorial-datahub-index>`: an extensible data catalog for data discovery, observability, and governance.
+- {ref}`Charmed Airbyte <tutorial-airbyte-index>`: connector-based data ingestion from SaaS applications, databases, files, and APIs.
 - {ref}`Charmed Superset <tutorial-superset-index>`: data exploration and visualization with SQL Lab, charts, and dashboards.
 - {ref}`Charmed Trino <tutorial-trino-index>`: a distributed SQL query engine federating every connected data source.
 - {ref}`Charmed Ranger <tutorial-ranger-index>`: centralized access control and audit for the query layer.
@@ -24,6 +25,7 @@ get-started
 :maxdepth: 1
 
 DataHub <datahub/index>
+Airbyte <airbyte/index>
 Superset <superset/index>
 Trino <trino/index>
 Ranger <ranger/index>

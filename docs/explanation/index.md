@@ -19,6 +19,7 @@ governance-model
 :maxdepth: 1
 
 DataHub architecture <datahub/architecture>
+Airbyte architecture <airbyte/architecture>
 Superset architecture <superset/architecture>
 Trino architecture <trino/architecture>
 Ranger architecture <ranger/architecture>
