@@ -22,7 +22,10 @@
 | `/health` | None | Health route, also used by the Pebble check. |
 | `/.well-known/oauth-protected-resource/mcp` | None | [RFC 9728](https://datatracker.ietf.org/doc/html/rfc9728) resource metadata, naming the authorization server. Advertised in the `WWW-Authenticate` header of a `401`. |
 | `/.well-known/oauth-authorization-server` | None | [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414) metadata, served only when the charm fronts Google as an OAuth proxy. |
-| `/auth/callback` | None | Redirect URI of the OAuth proxy, served only when the charm fronts Google. This is the one URI to register on the Google client. |
+| `/authorize` | None | Authorization endpoint of the OAuth proxy, served only when the charm fronts Google. Where a caller sends the user to sign in. |
+| `/token` | Client credentials | Token endpoint of the OAuth proxy, served only when the charm fronts Google. Exchanges an authorization code, and refreshes. |
+| `/register` | None | [RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591) dynamic client registration, served only when the charm fronts Google and `enable-client-registration` is left on. |
+| `/auth/callback` | None | Redirect URI of the OAuth proxy, served only when the charm fronts Google. Register it on the Google client, alongside the redirect URI of any client configured against Google directly. |
 
 The `.well-known` documents are served at the root of the host, so the server needs a hostname of its own rather than a path on another one.
 
@@ -65,12 +68,30 @@ The DataHub charm creates one service account per `datahub-client` relation:
 | Service account | `[juju] <app>-<relation-id>` | Created with no privileges of its own; inherits the DataHub default all-users policies, which grant metadata read. |
 | Access token | Non-expiring, passed in a Juju secret granted to the relation | Never written to relation data, to charm configuration, or to the logs. Deleted with the service account when the relation is removed. |
 
+## Client registration
+
+A caller needs an OAuth client before it can authenticate a user, and there are two ways for it to hold one.
+
+| | How the caller obtains a client | Example |
+|---|---|---|
+| Registers its own | Dynamically, on first connection, from whichever party registers clients | An MCP client on a developer's machine, configured with the URL alone |
+| Registered in advance | An operator gives it this deployment's own client ID and secret | Gemini Enterprise, configured with Google's endpoints and those credentials |
+
+Which endpoints a pre-registered caller is given depends on whether it discovers this server. One that reads the resource metadata finds the OAuth proxy and uses `/authorize` and `/token` here. One configured from a form does not look, and is given Google's own `https://accounts.google.com/o/oauth2/auth` and `https://oauth2.googleapis.com/token` instead. Both are accepted: the first presents a token this server minted, the second one Google minted, and each is admitted on the client it names.
+
+`enable-client-registration=false` leaves only the second kind. What that changes depends on which party is the registrar:
+
+| Identity provider | Registrar | Effect of turning registration off |
+|---|---|---|
+| Google | This server, acting as an OAuth proxy | `/register` is withdrawn and no longer advertised, and no client but this deployment's own resolves, so callers that registered earlier are cut off too. A caller holding a token Google issued is held to the same rule by the client named on it. |
+| One that registers clients itself (Hydra, Canonical Identity Platform) | The provider | The provider cannot be stopped from registering, so tokens are refused instead unless their `client_id` or `azp` claim names this deployment's client. |
+
 ## Scaling
 
 | Identity provider | Units |
 |---|---|
 | None, or one that registers clients itself (Hydra, Canonical Identity Platform) | Scalable. The server holds no state; tokens are checked against the provider. |
-| Google | One. The charm runs an OAuth proxy that is itself the authorization server, holding client registrations and issued tokens in the unit. |
+| Google | One. The charm runs an OAuth proxy that is itself the authorization server, holding client registrations and issued tokens in the unit. A restart loses them, and callers that discovered the proxy sign in again; a caller configured against Google directly holds a token no unit had to issue and is unaffected. |
 
 ## Network egress
 

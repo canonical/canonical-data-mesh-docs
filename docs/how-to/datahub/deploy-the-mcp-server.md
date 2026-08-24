@@ -75,7 +75,7 @@ Google publishes no registration endpoint, so a client pointed at it has no way 
 The deployment needs one Google client of its own, separate from the one DataHub's SSO uses, because a client's redirect URIs are its own:
 
 1. In the [Google Cloud console](https://console.cloud.google.com/apis/credentials), create an OAuth client of type **Web application**. A desktop client is not needed: the secret stays on the server and never reaches users.
-2. Under **Authorized redirect URIs**, add exactly one entry, `https://<your-hostname>/auth/callback`, for example `https://mcp.example.com/auth/callback`.
+2. Under **Authorized redirect URIs**, add `https://<your-hostname>/auth/callback`, for example `https://mcp.example.com/auth/callback`. Add the redirect URI of any client configured by hand alongside it.
 3. Deploy a second integrator carrying that client, with the same endpoints as DataHub's (see {ref}`Enable single sign-on <how-to-datahub-enable-sso>` for the configuration file), and relate it:
 
 ```bash
@@ -86,7 +86,25 @@ juju integrate datahub-mcp-k8s:oauth oauth-external-idp-integrator-mcp:oauth
 Two consequences of the proxy are worth knowing:
 
 - **The workload needs egress to `oauth2.googleapis.com`**, because it exchanges the authorization code and validates tokens server-side. Behind a filtering proxy, allow that host. The charm forwards the model's `juju-http-proxy`, `juju-https-proxy`, and `juju-no-proxy` settings to the workload; see {ref}`Configure model proxies <how-to-datahub-configure-model-proxies>`.
-- **Run a single unit.** The proxy is the authorization server, and it holds its client registrations and the tokens it issues in the unit, so a second unit does not recognize the first one's tokens. Providers that register clients themselves keep no such state and scale normally.
+- **Run a single unit.** The proxy is the authorization server, and it holds its client registrations and the tokens it issues in the unit, so a second unit does not recognize the first one's tokens and a restarted unit does not recognize its own. Callers that discovered the proxy sign in again when that happens. Providers that register clients themselves keep no such state and scale normally.
+
+Not every client can use the proxy. One that reads `/.well-known/oauth-protected-resource` finds it and configures itself; one an administrator fills into a form never looks, and is pointed at Google directly. Such a client arrives holding a token Google issued rather than one the proxy minted, and the server accepts it when Google confirms it was issued to the client this deployment owns.
+
+## Limit the endpoint to callers you registered
+
+By default a caller obtains an OAuth client of its own on first connection, which is what lets a user point a client at the URL and nothing else. It also means that anyone who can reach the endpoint and sign in at the identity provider can call the tools with any client they like.
+
+To leave only the callers set up in advance:
+
+```bash
+juju config datahub-mcp-k8s enable-client-registration=false
+```
+
+Those callers are configured with this deployment's own client ID and secret, the same pair that is on the `oauth` relation, and need nothing added to the charm. The server recognizes that client without a registration.
+
+The charm enforces this wherever the registrar happens to be. Fronting Google it is the registrar itself, so it withdraws `/register`, stops advertising it, and serves no client but its own. Against a provider that registers clients itself it cannot stop the registering, so it refuses tokens that were not issued to this deployment's client.
+
+A client configured against Google directly, such as Gemini Enterprise, is unaffected either way: it already presents a token naming this deployment's client, which is what the rule asks for.
 
 ## Enable the mutation tools
 
@@ -108,7 +126,7 @@ juju status --relations
 
 ## Connect a client
 
-The URL is all a client needs, including when the endpoint authenticates its callers. It discovers where to authenticate and obtains its own credentials on its own; no client ID, secret, or callback port belongs in a client's configuration:
+Unless client registration has been turned off, the URL is all a client needs, including when the endpoint authenticates its callers. It discovers where to authenticate and obtains its own credentials on its own; no client ID, secret, or callback port belongs in a client's configuration:
 
 ```json
 {
@@ -122,6 +140,8 @@ The URL is all a client needs, including when the endpoint authenticates its cal
 ```
 
 The first call opens a browser for the user to log in with the identity provider. What a caller sees in the catalog does not depend on who they are: every call reaches DataHub as the one service account from the `datahub-client` relation. The identity decides whether a caller may call the server at all, not what it will show them.
+
+Where registration is off, the client is instead configured with the endpoint's `/authorize` and `/token` URLs and this deployment's client ID and secret. Users still sign in as themselves; only the client is provisioned in advance.
 
 ## Remove the MCP server
 
