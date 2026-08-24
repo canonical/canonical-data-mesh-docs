@@ -43,7 +43,9 @@ Through the `trino-catalog` and `datahub-client` integrations, the charm creates
 | GMS access token secret | `JUJU_MANAGED_GMS_TOKEN` | - |
 | Service accounts for `datahub-client` consumers | `[juju] <app>-<relation-id>` | `[juju] datahub-mcp-k8s-7` |
 
-Catalog names are normalized by uppercasing and replacing non-alphanumeric characters with `_`. When a catalog is removed or the Trino relation is broken, the corresponding ingestion sources and secrets are deleted automatically; ingested metadata is preserved.
+Catalog names are normalized by uppercasing and replacing non-alphanumeric characters with `_`. The charm never deletes the ingestion sources and secrets it creates for Trino catalogs: when a catalog is removed or the Trino relation is broken, they stay in place, so that removing the relation cannot destroy customized ingestion sources. Remove the ones you no longer want in the DataHub UI. 
+
+Service accounts are different: the one created for a `datahub-client` relation is deleted when that relation is removed, which invalidates the tokens issued for it.
 
 ## Juju secrets used by the charm
 
