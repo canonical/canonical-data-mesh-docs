@@ -16,7 +16,7 @@ The charm propagates the settings as follows:
 
 - `datahub-actions` receives the standard proxy variables (`HTTP_PROXY`, `HTTPS_PROXY`, `NO_PROXY`, and lowercase variants), which are used by Python tooling and ingestion runs.
 - `datahub-frontend` receives the equivalent JVM proxy settings, used for example when contacting an identity provider.
-- Trino ingestion sources managed by the charm get proxy variables injected into their recipes.
+- Trino ingestion sources managed by the charm get the proxy variables added to their execution environment. The charm keeps them in step with the model configuration, so existing ingestion sources pick up a changed proxy, and lose the variables again if you remove the proxy configuration.
 
 ## Apply the change
 
