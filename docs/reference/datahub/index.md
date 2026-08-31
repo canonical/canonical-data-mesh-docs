@@ -14,6 +14,7 @@ A DataHub deployment can be extended with the {ref}`MCP server <reference-datahu
 system-requirements
 integrations
 observability
+limitations
 mcp-server
 ```
 

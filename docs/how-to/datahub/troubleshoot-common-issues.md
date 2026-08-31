@@ -15,7 +15,7 @@ A blocked status message usually names the missing piece - for example a missing
 
 ## Ingestion fails or `/graphql` returns 500
 
-If DataHub loads but features such as **Ingestion** fail, and requests to `/graphql` return a `500` error, the OpenSearch cross-model offer is typically blocked on the provider side. Check the offer status in the OpenSearch model and ensure the offer is accepted:
+If DataHub loads but features such as **Data Sources** fail, and requests to `/graphql` return a `500` error, the OpenSearch cross-model offer is typically blocked on the provider side. Check the offer status in the OpenSearch model and ensure the offer is accepted:
 
 ```bash
 juju switch <MACHINE_MODEL>
