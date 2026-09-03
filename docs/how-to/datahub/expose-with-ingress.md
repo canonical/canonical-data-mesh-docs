@@ -48,11 +48,11 @@ For production, use an ACME provider such as [Lego](https://charmhub.io/lego) in
 
 ## Find the published URLs
 
-Ask each Traefik for the endpoints it proxies:
+Ask each Traefik for the endpoints it serves:
 
 ```bash
-juju run traefik-frontend/0 show-proxied-endpoints
-juju run traefik-gms/0 show-proxied-endpoints
+juju run traefik-frontend/0 show-external-endpoints
+juju run traefik-gms/0 show-external-endpoints
 ```
 
 Verify the GMS API through its ingress:
@@ -75,6 +75,15 @@ For the frontend, use host-based routing so DataHub is served at the root of a h
 juju config traefik-frontend external_hostname=example.com routing_mode=subdomain
 ```
 
+`external_hostname` is a base domain, not the final URL: in subdomain mode Traefik serves each
+application at `<model>-<application>.<external_hostname>`, so DataHub ends up at
+`https://<MODEL>-datahub-k8s.example.com/`. Point that name, or a wildcard record for the domain,
+at the frontend Traefik's load balancer address, and read the exact URL back with
+`juju run traefik-frontend/0 show-external-endpoints`.
+
+Traefik blocks with `"external_hostname" must be set while using routing mode "subdomain"` if the
+routing mode is changed without a hostname, so set both together.
+
 - Alternatively, use the Nginx Ingress Integrator, which serves applications at the root of a hostname by default.
 
-Point DNS for the chosen hostname at the ingress load balancer IP. Path-prefix routing remains fine for the GMS API endpoint, which is not a browser application.
+Path-prefix routing remains fine for the GMS API endpoint, which is not a browser application.

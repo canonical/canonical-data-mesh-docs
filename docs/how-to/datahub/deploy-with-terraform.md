@@ -34,9 +34,23 @@ The product module supports two modes, controlled by the offer URL variables:
 - **Deploy the data platform (default)**: leave the `*_offer_url` inputs empty. The module deploys PostgreSQL, Kafka, and OpenSearch in the machine model, creates cross-model offers, and consumes them from the Kubernetes model.
 - **Bring your own data platform**: set `database_offer_url`, `kafka_offer_url`, and `opensearch_offer_url` (all three together) to existing offers on the same controller. The module then skips the data platform deployment.
 
+## Set the frontend hostname
+
+The module deploys both Traefik applications, relates them to DataHub, and terminates TLS on them, but Traefik
+routes by path prefix by default and the DataHub frontend cannot be served that way. Set
+`external_hostname` to a base domain and the module configures the frontend Traefik for host-based
+routing (`routing_mode = "subdomain"`) instead:
+
+```hcl
+external_hostname = "example.com"
+```
+
+See {ref}`Expose DataHub with ingress <how-to-datahub-expose-with-ingress>` for why the frontend needs
+this and the GMS API does not.
+
 ## Enable SSO (optional)
 
-Set the `oauth_external_idp_integrator_config` variable with at minimum `client_id` and `client_secret` (the endpoint options default to Google). The module then deploys the integrator and relates it to DataHub. Leave it `null` to disable SSO, or relate DataHub to a Canonical Identity Platform Hydra outside the module.
+Set the `oauth_external_idp_integrator_config` variable with at minimum `client_id` and `client_secret` (the endpoint options default to Google). The module then deploys the integrator and relates it to DataHub. SSO needs the frontend reachable over HTTPS at a real hostname, so set `external_hostname` as well. Leave it `null` to disable SSO, or relate DataHub to a Canonical Identity Platform Hydra outside the module.
 
 ## Apply and verify
 
@@ -44,7 +58,7 @@ Run the module with your model UUIDs and any overrides, then verify as usual:
 
 ```bash
 juju run datahub-k8s/0 get-password
-juju run traefik-frontend/0 show-proxied-endpoints
+juju run traefik-frontend/0 show-external-endpoints
 ```
 
 ## Notes

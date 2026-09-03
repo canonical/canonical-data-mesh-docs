@@ -35,11 +35,12 @@ sudo apt-get install -y postgresql-client
 psql "postgresql://<USERNAME>:<PASSWORD>@<ENDPOINTS>/demo" -c "CREATE TABLE customers (id SERIAL PRIMARY KEY, name TEXT NOT NULL, email TEXT, created_at TIMESTAMP DEFAULT now());"
 ```
 
-## Create an ingestion source in DataHub
+## Create a data source in DataHub
 
 Back in the DataHub UI:
 
-1. Select **Ingestion** in the top navigation bar.
+1. Select **Data Sources**, under **Admin**, in the left navigation sidebar. The page is titled
+   **Manage Data Sources**.
 2. Click **Create new source** and choose **PostgreSQL**.
 3. Fill in the connection details:
    - **Host and Port**: the `endpoints` value, for example `10.108.29.12:5432`
@@ -48,7 +49,7 @@ Back in the DataHub UI:
 4. Click **Next**, keep the default schedule settings, and give the source a name, for example `demo-postgres`.
 5. Click **Save & Run**.
 
-The ingestion run appears in the list with status **Pending**, then **Running**. After a minute or two it reports **Succeeded**.
+The run appears under **Run history** with status **Pending**, then **Running**. After a minute or two it reports **Succeeded**.
 
 ```{note}
 The ingestion runs inside the `datahub-actions` container, which must be able
@@ -66,6 +67,6 @@ Type `customers` in the DataHub search bar. The table appears as a dataset with:
 
 ![The customers dataset in DataHub search results, showing its column schema](../../media/datahub/search-customers-dataset.png)
 
-You have a working metadata catalog. The same flow applies to any PostgreSQL, and other connector types are available in the ingestion UI. For automatic, charm-managed ingestion of Trino catalogs, see {ref}`Integrate with Trino <how-to-datahub-integrate-with-trino>`.
+You have a working metadata catalog. The same flow applies to any PostgreSQL, and other connector types are available on the same page. For automatic, charm-managed ingestion of Trino catalogs, see {ref}`Integrate with Trino <how-to-datahub-integrate-with-trino>`.
 
 Continue to {ref}`clean up <tutorial-datahub-cleanup>`.

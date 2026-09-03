@@ -28,7 +28,7 @@ juju integrate datahub-k8s trino-catalog
 
 ## Verify
 
-In the DataHub UI, select **Ingestion**. You should see one ingestion source per Trino catalog, named `[juju] <catalog>-ingestion`. Each runs on a randomly assigned daily schedule between 22:00 and 06:00 UTC. After the first run completes, the catalog's schemas and tables appear in DataHub search.
+In the DataHub UI, select **Data Sources**, under **Admin**, in the left navigation sidebar. You should see one source per Trino catalog, named `[juju] <catalog>-ingestion`. Each runs on a randomly assigned daily schedule between 22:00 and 06:00 UTC. After the first run completes, the catalog's schemas and tables appear in DataHub search.
 
 ## Configure ingestion filter patterns
 
