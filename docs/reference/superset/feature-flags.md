@@ -26,5 +26,5 @@ Grouped by upstream maturity. Refer to the [Superset documentation](https://supe
 
 | Flag | Behavior |
 |---|---|
-| `ALERT_REPORTS` | Enables email alerts and reports, and registers the beat schedule that dispatches them. Also turns on `PLAYWRIGHT_REPORTS_AND_THUMBNAILS` automatically, so do not set that flag yourself. Requires the SMTP secret; see {ref}`Enable alerts and reports <how-to-superset-enable-alerts-and-reports>`. |
+| `ALERT_REPORTS` | Enables email alerts and reports, and registers the beat schedule that dispatches them. Also turns on `PLAYWRIGHT_REPORTS_AND_THUMBNAILS` automatically, so do not set that flag yourself. Must be set on all three applications. Requires the `smtp` relation on each of them unless `report-dry-run` is set, and blocks with `ALERT_REPORTS requires an smtp relation` otherwise; see {ref}`Enable alerts and reports <how-to-superset-enable-alerts-and-reports>`. |
 | `GLOBAL_ASYNC_QUERIES` | Runs queries through the worker applications and delivers results over an asynchronous event channel backed by Redis. Requires at least one worker; see {ref}`Scale and tune performance <how-to-superset-scale-and-tune-performance>`. |

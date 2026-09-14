@@ -2,7 +2,7 @@
 
 # Superset reference
 
-**Superset** ([superset-k8s](https://charmhub.io/superset-k8s)) is a Kubernetes operator for [Apache Superset](https://superset.apache.org/), the data exploration and visualization platform that provides the Canonical Data Mesh with SQL exploration, charts, and dashboards. A deployment is made of one to three applications of the same charm - a web server, asynchronous workers, and a beat scheduler - backed by PostgreSQL and Redis, and integrating with Trino, ingress providers, and the Canonical Observability Stack.
+**Superset** ([superset-k8s](https://charmhub.io/superset-k8s)) is a Kubernetes operator for [Apache Superset](https://superset.apache.org/), the data exploration and visualization platform that provides the Canonical Data Mesh with SQL exploration, charts, and dashboards. A deployment is made of one to three applications of the same charm - a web server, asynchronous workers, and a beat scheduler - backed by PostgreSQL and Redis, and integrating with Trino, ingress providers, identity providers, an SMTP relay, and the Canonical Observability Stack.
 
 ## Reference pages
 

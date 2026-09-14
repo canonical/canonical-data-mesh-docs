@@ -29,7 +29,15 @@ juju integrate superset-k8s admin/cos.loki
 juju integrate superset-k8s admin/cos.grafana
 ```
 
-Repeat for the worker and beat applications to collect their telemetry too. Worker applications export Celery task metrics, which the dashboard uses for its worker panels.
+Repeat for the worker application to collect its telemetry too. The worker exports the counters of the scheduled tasks it runs, such as report delivery and log pruning, alongside Celery worker and queue metrics, which the dashboard uses for its worker panels.
+
+The beat scheduler exports no metrics, so relate it to Loki only:
+
+```bash
+juju integrate superset-k8s-beat admin/cos.loki
+```
+
+Relating its `metrics-endpoint` is harmless but publishes no scrape target.
 
 ## Verify
 

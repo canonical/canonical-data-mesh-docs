@@ -8,7 +8,7 @@ This guide describes how to connect Superset to [Trino](https://charmhub.io/trin
 
 - Superset is deployed with `charm-function=app-gunicorn` (the default). Worker and beat applications do not take part in this relation.
 - Trino is deployed as a coordinator (`charm-function=coordinator` or `all`) with at least one catalog in its `catalog-config`.
-- If Trino is behind an ingress with TLS, its `external-hostname` is configured.
+- If Trino is behind an ingress with TLS, it is related to an ingress provider.
 
 ```bash
 juju deploy trino-k8s --config charm-function=all --trust

@@ -6,20 +6,23 @@ Reference for the telemetry Superset exposes over its observability relations. F
 
 ## Metrics endpoint
 
-Every unit exposes Prometheus metrics on port 9102. What produces them depends on the application's `charm-function`:
+What a unit exports depends on the application's `charm-function`:
 
-| Application | Exporter | Content |
-|---|---|---|
-| UI (`app-gunicorn`, `app`) | StatsD exporter | Superset application metrics, emitted by the workload over UDP on port 9125 and translated to Prometheus format |
-| Beat (`beat`) | StatsD exporter | Scheduler activity |
-| Worker (`worker`) | Celery exporter | Celery worker and task metrics, read from the Redis broker |
+| Application | Exporter | Port | Content |
+|---|---|---|---|
+| UI (`app-gunicorn`) | StatsD exporter | 9102 | Superset application metrics, emitted by the workload over UDP on port 9125 and translated to Prometheus format |
+| Worker (`worker`) | StatsD exporter | 9102 | Counters from the task bodies the worker runs, such as `superset_reports_scheduler`, `superset_prune_logs` and `superset_prune_query` |
+| Worker (`worker`) | Celery exporter | 9103 | Celery worker, queue and per-task metrics, read from the Redis broker |
+| Beat (`beat`) | None | - | The scheduler only puts tasks on the broker; the tasks report from the worker that runs them |
+
+A beat application publishes no scrape job, so relating its `metrics-endpoint` to Prometheus adds no target.
 
 ## Metric namespaces
 
 | Prefix | Source | Examples |
 |---|---|---|
 | `superset_*` | Superset StatsD logger | `superset_welcome`, `superset_log`, `superset_DashboardRestApi_get_success`, `superset_ChartDataRestApi_data_time_count`, `superset_sqllab_query_time_executing_query_sum` |
-| `celery_*` | Celery exporter on worker units | `celery_worker_up`, task counters and timings |
+| `celery_*` | Celery exporter on worker units | `celery_worker_up`, `celery_queue_length`, `celery_active_worker_count`, `celery_task_received_total`, `celery_task_succeeded_total`, `celery_task_runtime` |
 
 Superset's REST API metrics follow the pattern `superset_<ApiClass>_<endpoint>_<outcome>` for counters and `superset_<ApiClass>_<endpoint>_time_<sum\|count>` for timings, so per-endpoint latency is the ratio of the two.
 
