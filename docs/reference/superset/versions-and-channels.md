@@ -16,11 +16,7 @@ Deploy from a versioned track to pin a major version:
 juju deploy superset-k8s --channel 6/stable
 ```
 
-Upgrading between major stable tracks is a supported, non-breaking operation:
-
-```bash
-juju refresh superset-k8s --channel 6/stable
-```
+Upgrading from track `5` to track `6` is supported and keeps everything stored in the metadata database, but it needs preparation beyond the refresh itself; see {ref}`Upgrade from Superset 5 to 6 <how-to-superset-upgrade-from-5-to-6>`.
 
 ## Charm and workload compatibility
 

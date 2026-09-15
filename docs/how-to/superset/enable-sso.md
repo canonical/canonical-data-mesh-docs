@@ -2,43 +2,75 @@
 
 # Enable single sign-on
 
-This guide describes how to let users log in to Superset with their Google accounts instead of local Superset credentials, and how to control the role they receive on first login.
+This guide describes how to let users log in to Superset with an OIDC identity provider instead of local Superset credentials, and how to control the role they receive on first login.
+
+Superset takes the provider's endpoints and its own client credentials from the `oauth` relation, which any charm providing the `oauth` interface can serve. This guide uses [oauth-external-idp-integrator](https://charmhub.io/oauth-external-idp-integrator), which passes on the details of a client you register with the identity provider yourself.
 
 ## Prerequisites
 
-- Superset is served over HTTPS on a stable hostname. See {ref}`Expose Superset with ingress <how-to-superset-expose-with-ingress>`.
-- You have access to a [Google Cloud project](https://console.cloud.google.com/projectcreate).
+- Superset is served over HTTPS on a stable hostname. See {ref}`Expose Superset with ingress <how-to-superset-expose-with-ingress>`. This is required, not advisory: the charm builds its redirect URI from the external URL the ingress provider reports, and blocks with `OAuth requires an HTTPS ingress URL` if an `oauth` relation exists without one.
+- An OIDC identity provider on which you can register a client application.
 
-## Obtain OAuth 2.0 credentials
+## Register a client with the identity provider
 
-1. Go to the [Google Cloud credentials page](https://console.cloud.google.com/apis/credentials).
-2. Select **+ Create credentials**, then **OAuth client ID**.
-3. Choose **Web application** as the application type and give it a name.
-4. Under **Authorized redirect URIs**, add `https://<YOUR_HOSTNAME>/oauth-authorized/google`.
-5. Create the client, then copy the client ID and client secret.
+Register Superset with the identity provider as a web application that uses the authorization code flow, with this redirect URI:
 
-## Configure the charm
+```text
+https://<YOUR_HOSTNAME>/oauth-authorized/oidc
+```
 
-Write the credentials to a configuration file:
+Note the client ID and client secret the provider issues.
+
+```{important}
+The callback path is `/oauth-authorized/oidc` whichever identity provider is
+behind it, because the charm registers the provider under the name `oidc`. A
+mismatch here fails the login with `redirect_uri_mismatch`.
+```
+
+Then collect the provider's endpoints. An OIDC provider lists them in its discovery document at `<ISSUER_URL>/.well-known/openid-configuration`.
+
+## Relate the identity provider
+
+Write the integrator configuration to a file, so that the client secret does not end up in your shell history:
 
 ```yaml
-# oauth.yaml
-superset-k8s:
-  google-client-id: <CLIENT_ID>
-  google-client-secret: <CLIENT_SECRET>
-  oauth-domain: <COMPANY_DOMAIN>
-  oauth-admin-email: <ADMIN_EMAIL>
+# idp-config.yaml
+oauth-external-idp-integrator:
+  issuer_url: <ISSUER_URL>
+  authorization_endpoint: <AUTHORIZATION_ENDPOINT>
+  token_endpoint: <TOKEN_ENDPOINT>
+  introspection_endpoint: <INTROSPECTION_ENDPOINT>
+  userinfo_endpoint: <USERINFO_ENDPOINT>
+  jwks_endpoint: <JWKS_ENDPOINT>
+  scope: "openid email profile"
+  client_id: <CLIENT_ID>
+  client_secret: <CLIENT_SECRET>
 ```
 
-`oauth-domain` restricts authentication to accounts in that domain, for example `canonical.com`. `oauth-admin-email` takes one email address or a comma-separated list; those users are given the `Admin` role on initialization.
-
-Apply the file:
+Deploy the integrator and relate it to Superset:
 
 ```bash
-juju config superset-k8s --file=oauth.yaml
+juju deploy oauth-external-idp-integrator --channel latest/edge --config idp-config.yaml
+juju integrate superset-k8s:oauth oauth-external-idp-integrator:oauth
 ```
 
-Apply the same configuration to your worker and beat applications if you run them, so that they share the same view of user identities.
+Relate the UI application only. It is the one that serves logins; workers and the beat scheduler do not authenticate users.
+
+## What the charm exchanges
+
+On relating, the charm publishes its client registration and reads the provider's answer back:
+
+| Published by Superset | Value |
+|---|---|
+| `redirect_uri` | `<external URL>/oauth-authorized/oidc` |
+| `scope` | `openid email profile` |
+| `grant_types` | `authorization_code` |
+
+The provider answers with the issuer URL, the authorization, token, user info, and JWKS endpoints, and the client ID and secret. Superset switches to OAuth authentication only once all of them are present, so until the handshake completes it keeps serving local logins with the `admin` account. Verify the exchange with:
+
+```bash
+juju status --relations
+```
 
 ## Choose the self-registration role
 
@@ -61,4 +93,14 @@ access to the catalogs Superset manages.
 
 ## Verify
 
-Open Superset in a private browser window. You are redirected to Google, and after authenticating you land in Superset as the Google account. Check the created account under **Settings** > **List users**.
+Open Superset in a private browser window. You are redirected to the identity provider, and after authenticating you land in Superset as that account. Check the created account and its role under **Settings** > **List users**.
+
+## Remove single sign-on
+
+Removing the relation returns Superset to local authentication:
+
+```bash
+juju remove-relation superset-k8s:oauth oauth-external-idp-integrator:oauth
+```
+
+The charm drops the provider settings from the workload configuration and restarts it. Accounts created through SSO remain in the metadata database.
