@@ -10,3 +10,4 @@ dependencies:
     - canonical/copilot-collections/assets/instructions/common/instructions.instructions.md
     - canonical/copilot-collections/assets/instructions/python/code-commenting.instructions.md
     - canonical/copilot-collections/assets/instructions/common/secret-guard.instructions.md
+    - microsoft/apm/packages/apm-guide
