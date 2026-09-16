@@ -18,13 +18,18 @@ See {ref}`Scale and tune performance <how-to-superset-scale-and-tune-performance
 
 The outgoing mail relay reaches Superset over the `smtp` relation, provided by the [smtp-integrator](https://charmhub.io/smtp-integrator) charm. The relay password is kept in a Juju secret, so it never appears in configuration or on the relation.
 
-Store the password in a Juju user secret. The key must be `password`:
+Store the password in a Juju user secret. Pass it in a file rather than on the command line, so that it stays out of your shell history. The key must be `password`:
 
-```bash
-juju add-secret smtp-password password=<SMTP_PASSWORD>
+```yaml
+# smtp-password.yaml
+password: <SMTP_PASSWORD>
 ```
 
-The command prints the secret ID. Deploy the integrator with the relay details:
+```bash
+juju add-secret smtp-password --file=smtp-password.yaml
+```
+
+The command prints the secret ID. Delete the file once the secret exists, or store it somewhere protected. Deploy the integrator with the relay details:
 
 ```bash
 juju deploy smtp-integrator --channel latest/stable \
@@ -45,7 +50,7 @@ juju grant-secret smtp-password smtp-integrator,superset-k8s,superset-k8s-worker
 juju config smtp-integrator password_secret=<SECRET_ID>
 ```
 
-An application that has not been granted the secret blocks with `smtp relation data is unusable: Could not consume secret <SECRET_ID>`. To change the password later, update the secret with `juju update-secret smtp-password password=<NEW_PASSWORD>`; the applications pick up the new value without being reconfigured.
+An application that has not been granted the secret blocks with `smtp relation data is unusable: Could not consume secret <SECRET_ID>`. To change the password later, put the new one in the same file and run `juju update-secret smtp-password --file=smtp-password.yaml`; the applications pick up the new value without being reconfigured.
 
 If the relay needs no authentication, set `auth_type=none` and skip the secret.
 
@@ -85,7 +90,14 @@ Setting `ALERT_REPORTS` without the `smtp` relation blocks the application with 
 
 `external-url` is the URL recipients open from the email, so it must be a URL their browser can reach. The charm does not derive it from anything: the worker builds the link and holds no ingress relation, so set it there even when the UI is exposed through an ingress provider. Left unset, the links in the email come out relative and recipients cannot open them.
 
-Two more worker options shape the emails. `email-subject-prefix` changes the `[Superset] ` prefix on every alert and report subject line. `screenshot-timeout` is how long, in seconds, the worker waits for a dashboard or chart to render before giving up on the screenshot; the default is 600, so raise it only if large dashboards still time out.
+Two more worker options shape the emails. `email-subject-prefix` changes the `[Superset] ` prefix on every alert and report subject line. `screenshot-timeout` is how long, in seconds, the worker's browser waits for the page before it gives up on the screenshot; the default is 600.
+
+`screenshot-timeout` bounds that wait and nothing else. The page it waits for is served by the UI application, so the timeouts of the UI bound the render as well:
+
+- `webserver-timeout` on the UI, 180 seconds by default, is handed to the browser as the timeout for each chart's data request. A chart whose query runs longer than this is abandoned and drawn as an error in the screenshot.
+- `gunicorn-timeout` on the UI, 60 seconds by default, is the timeout of the web server itself. The UI serves requests with `gevent` workers, where this bounds how long a worker may go silent rather than the length of any single request.
+
+Raising `screenshot-timeout` on its own therefore does not guarantee a slow dashboard renders. Size the timeouts of the UI to the slowest chart the report has to draw.
 
 ## Verify
 

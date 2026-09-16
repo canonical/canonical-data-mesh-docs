@@ -45,15 +45,19 @@ juju model-config juju-http-proxy=<HTTP_PROXY> juju-https-proxy=<HTTPS_PROXY> ju
 
 ## Create the signing keys secret
 
-Store the current secret key, together with a key for asynchronous queries, in a Juju user secret. Reuse the value of `global-async-queries-jwt` if you had set it, or generate a new one; nothing stored in the metadata database depends on it:
+Store the current secret key, together with a key for asynchronous queries, in a Juju user secret. Reuse the value of `global-async-queries-jwt` if you had set it, or generate a new one; nothing stored in the metadata database depends on it. Pass the keys in a file rather than on the command line, so that the secret key stays out of your shell history:
 
-```bash
-juju add-secret superset-signing-keys \
-  secret-key=<CURRENT_SECRET_KEY> \
-  async-queries-jwt="$(openssl rand -hex 32)"
+```yaml
+# signing-keys.yaml
+secret-key: <CURRENT_SECRET_KEY>
+async-queries-jwt: <NEW_RANDOM_VALUE>
 ```
 
-The command prints the secret ID. Grant the secret to every application of the deployment:
+```bash
+juju add-secret superset-signing-keys --file=signing-keys.yaml
+```
+
+The command prints the secret ID. Delete the file once the secret exists, or store it somewhere protected. Grant the secret to every application of the deployment:
 
 ```bash
 juju grant-secret superset-signing-keys superset-k8s,superset-k8s-worker,superset-k8s-beat
