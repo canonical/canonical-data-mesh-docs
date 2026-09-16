@@ -10,6 +10,7 @@ To reference the skills, place the following lines in `apm.yml`. Consider also i
 dependencies:
   apm:
   - git: canonical/canonical-data-mesh-docs
+    path: resources/development
 ```
 
 We recommend adding instruction/skill/agent directories for most harnesses in `.gitignore`.
@@ -19,18 +20,24 @@ We recommend adding instruction/skill/agent directories for most harnesses in `.
 ```markdown
 ### Setting up the environment for agents
 
+This repository uses [apm](https://github.com/microsoft/apm) for managing dependencies for agentic resources. 
 
 \```sh
 apm install --target {copilot,claude,codex,opencode} # places skill and agent files. See apm docs for full list of supported harnesses
-apm compile --target ... # generates AGENTS.md, CLAUDE.md files from custom instructions
 \```
+
+The agent `apm-expert` and `apm-usage` skills are available for FAQ and assistance with the tool.
+
+Some harnesses do not support granular instruction/rule sets, and rely solely on an entrypoint like `AGENTS.md`. To generate a single file with all the instructions, use `apm compile`.
+
+You can use `apm.local.yml` for specifying additional personal resources.
+
 
 > Please note, that generated artifacts for Copilot are still tracked in the repository. This ensures that agents launched in web applications (chat, IDE) of GitHub have the necessary instructions.
 
 ```
 
-
-`.gitignore` contents
+`.gitignore` contents:
 
 ```
 # APM dependencies
@@ -40,6 +47,7 @@ apm_modules/
 CLAUDE.md
 .opencode
 AGENTS.md
+.codex
 # .github/instructions and .agents/skills are not ignored
 # as we would like for them to be available in the Web Chat/IDE 
 # These skills are ignored because they are not necessary there.
