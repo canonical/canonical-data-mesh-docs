@@ -31,7 +31,7 @@ Apply it to the charm:
 juju config superset-k8s html-sanitization-schema-extensions=@sanitization-extensions.json
 ```
 
-The value is merged into Superset's default sanitization schema, which follows the [hast-util-sanitize](https://github.com/syntax-tree/hast-util-sanitize) format. Apply the same configuration to the worker application if your reports render the same content.
+The value is merged into Superset's default sanitization schema, which follows the [hast-util-sanitize](https://github.com/syntax-tree/hast-util-sanitize) format. Set it on the UI application only: the UI serves the schema to the browser that renders the markup, and report screenshots are taken by a worker loading pages from that same UI.
 
 ## Verify
 

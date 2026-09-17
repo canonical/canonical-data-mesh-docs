@@ -11,7 +11,9 @@ These guides cover common operational tasks and configurations for Superset. The
 
 expose-with-ingress
 enable-sso
+trust-a-certificate-authority
 scale-and-tune-performance
+deploy-with-terraform
 ```
 
 ## Integrations
@@ -30,4 +32,5 @@ observe-superset
 
 enable-alerts-and-reports
 configure-html-sanitization
+upgrade-from-5-to-6
 ```

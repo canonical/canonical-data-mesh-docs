@@ -8,7 +8,7 @@ This page explains the components of a Superset deployment, how they fit togethe
 
 Apache Superset is a single application that runs in three distinct roles. The charm keeps that shape: the same charm is deployed once per role, selected with the `charm-function` configuration option.
 
-- **Web server and UI** (`app-gunicorn`) serves the browser interface and the REST API on port 8088. This is the only function that takes part in the ingress and Trino relations.
+- **Web server and UI** (`app-gunicorn`) serves the browser interface and the REST API on port 8088. This is the only function that takes part in the ingress, OAuth, and Trino relations, and the only one that initializes the metadata database.
 - **Worker** (`worker`) executes Celery tasks: asynchronous SQL Lab and chart queries, report and alert delivery, and cache warm-ups.
 - **Beat scheduler** (`beat`) triggers periodic tasks on a schedule: report dispatch, cache warm-up, and pruning of the action log. Exactly one beat unit should run, otherwise scheduled tasks fire more than once.
 
@@ -19,7 +19,7 @@ Deploying them as separate Juju applications lets each scale on its own axis: th
 ```mermaid
 graph LR
     subgraph k8s [Kubernetes model]
-        ING[nginx-ingress-integrator]
+        ING[ingress provider<br/>e.g. traefik-k8s]
         UI[superset-k8s<br/>web server :8088]
         W[superset-k8s-worker<br/>Celery workers]
         B[superset-k8s-beat<br/>scheduler]
@@ -45,3 +45,9 @@ graph LR
 ## Charm design
 
 **Configuration rendered into the Pebble layer.** The charm turns configuration options and relation data into environment variables on the workload service, and pushes the Superset configuration modules (`superset_config.py` and its siblings) into the container on every update. A configuration change therefore replans the service, which restarts the workload.
+
+**One environment, three roles.** All three applications receive the same environment; what differs is the `charm-function` they start with and what the UI receives from its own relations. An option set on an application that does not act on it is loaded and ignored.
+
+**Relations in any order.** Each application holds its own PostgreSQL relation, and so its own database user, and a PostgreSQL table belongs to the user that created it. A worker or beat scheduler that reach an empty database first wait with `waiting for the UI to initialise the database` until the UI has initialized the schema, and start on their own after that. A deployment converges whatever order its relations are created in.
+
+**The ingress provider owns the external URL.** Superset holds no hostname or TLS configuration. The provider on the `ingress` relation decides the URL and reports it back, and the charm builds its OIDC callback from it. The worker, which writes the links into report emails, holds no such relation, which is why it takes its URL from the `external-url` option.

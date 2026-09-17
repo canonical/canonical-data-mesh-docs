@@ -14,24 +14,39 @@ A Superset deployment is made up of three functions, each deployed as its own ap
 
 This tutorial deploys the web server only. To add workers and a scheduler later, see {ref}`Scale and tune performance <how-to-superset-scale-and-tune-performance>`.
 
-Superset requires a secret key, which it uses to sign session cookies and encrypt sensitive values in its metadata database. Generate one and pass it at deploy time, together with an admin password:
+Superset needs two signing keys: `secret-key`, which signs session cookies and encrypts the database connection passwords stored in its metadata database, and `async-queries-jwt`, which signs the cookie used for asynchronous query results. Generate them and store them in a Juju user secret:
 
 ```bash
-juju deploy superset-k8s --channel 6/stable \
-  --config superset-secret-key="$(openssl rand -base64 42)" \
-  --config admin-password=<ADMIN_PASSWORD>
+juju add-secret superset-signing-keys \
+  secret-key="$(openssl rand -base64 42)" \
+  async-queries-jwt="$(openssl rand -hex 32)"
 ```
 
-```{caution}
-Keep the secret key stable for the lifetime of a deployment: changing it later
-invalidates everything encrypted with it, including stored database connection
-credentials. Set `admin-password` explicitly as well, otherwise the initial
-admin account is created with the default password `admin`.
+The command prints the secret ID (a URI starting with `secret:`). Note it down; the next step passes it to the charm.
+
+Deploy the charm, grant it access to the secret, then point it at the secret:
+
+```bash
+juju deploy superset-k8s --channel 6/stable
+juju grant-secret superset-signing-keys superset-k8s
+juju config superset-k8s signing-keys-secret-id=<SECRET_ID>
 ```
+
+Grant the secret before setting the option. Granting does not notify the charm, so done the other way round the unit keeps reporting that it cannot access the secret until its next periodic status check.
+
+```{caution}
+Keep `secret-key` stable for the lifetime of a deployment: it encrypts the
+database connection passwords held in the metadata database, so changing it
+makes every stored connection password unreadable. Keep the secret backed up
+independently of the model and treat it as part of a Superset backup.
+```
+
+The admin account is created on first start with a password the charm generates.
+The signing keys are the only credentials you supply.
 
 The charm channel selects the Superset major version, for example `6/stable` for Superset 6. See {ref}`Versions and channels <reference-superset-versions-and-channels>` for the full list.
 
-Until it is integrated with its backing services, the charm reports `blocked` with `Needs a PostgreSQL relation`.
+Until it is integrated with its backing services, the charm reports `blocked` and names every relation it is missing, for example `Required relations missing: PostgreSQL, Redis`.
 
 ## Integrate with PostgreSQL and Redis
 
@@ -76,10 +91,14 @@ Either browse from `multipass shell superset-tutorial`, or forward the port out 
 
 ```shell
 # Run inside the VM. `multipass list` gives the VM address to then browse from the host.
-microk8s kubectl port-forward -n superset-k8s pod/superset-k8s-0 9002:9002 --address 0.0.0.0
+microk8s kubectl port-forward -n superset-tutorial pod/superset-k8s-0 8088:8088 --address 0.0.0.0
 ```
 
-Log in with the username `admin` and the password you set at deploy time.
+Log in with the username `admin`. The charm generates the password; read it with:
+
+```bash
+juju run superset-k8s/leader get-admin-password
+```
 
 ```{note}
 Accessing the unit IP directly is fine for a local tutorial. For anything
