@@ -16,3 +16,7 @@ make run
 ```
 
 This serves a live-reloading build at `http://127.0.0.1:8000`. Other useful targets: `make html`, `make spelling`, `make linkcheck`.
+
+## Resources for agentic development
+
+This repository also provides list of custom instructions, skills, and agents that are used for development of different products of Data Mesh. For details, see [development resources](./resources/development/README.md)   
