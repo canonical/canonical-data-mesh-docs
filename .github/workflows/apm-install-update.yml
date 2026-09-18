@@ -1,0 +1,42 @@
+name: APM install update
+
+on:
+  workflow_call:
+    inputs:
+      branch_name:
+        description: "Branch name used for the update pull request"
+        default: "chore/auto-apm-install"
+        type: string
+
+permissions: {}
+
+jobs:
+  apm-install-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Install APM
+        run: pip install --user apm-cli
+
+      - name: Run apm install
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          apm install
+
+      - name: Create Pull Request
+        uses: canonical/create-pull-request@6b53f317c9556693d19beaa5651cb8c8843809e5 # v1.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update apm dependencies"
+          branch-name: "${{ inputs.branch_name || 'chore/auto-apm-install' }}"
+          title: "chore: update apm dependencies"
+          body: "Automated `apm install` run: refreshes apm.lock.yaml, .github/instructions, and .agents/skills."
+          upsert: true
+          ignore-no-changes: true
