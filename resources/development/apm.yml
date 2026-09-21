@@ -1,5 +1,5 @@
 name: data-mesh-guidelines
-version: 0.0.1-rc1
+version: 0.0.1-rc3
 description: Data Mesh Development Guidelines - Custom instructions for Copilot
 
 targets: [copilot]
@@ -9,4 +9,9 @@ dependencies:
     - canonical/copilot-collections/assets/instructions/common/core-directive.instructions.md
     - canonical/copilot-collections/assets/instructions/common/instructions.instructions.md
     - canonical/copilot-collections/assets/instructions/common/secret-guard.instructions.md
+    - canonical/copilot-collections/skills/secret-guard
+    - canonical/copilot-collections/assets/instructions/python/code-commenting.instructions.md
+    - canonical/copilot-collections/assets/instructions/documentation/documentation.instructions.md
+    - canonical/copilot-collections/groups/platform-engineering/agents/charm-engineer.agent.md
+    - canonical/copilot-collections/groups/platform-engineering/instructions/lib-updates.instructions.md
     - microsoft/apm/packages/apm-guide
