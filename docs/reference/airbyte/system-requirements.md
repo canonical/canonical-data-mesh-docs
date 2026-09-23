@@ -40,6 +40,6 @@ The deployment flows in this documentation are tested with:
 |---|---|
 | [postgresql-k8s](https://charmhub.io/postgresql-k8s) | 14/stable |
 | [minio](https://charmhub.io/minio) | ckf-1.10/stable |
-| [temporal-k8s](https://charmhub.io/temporal-k8s) | latest/edge |
-| [temporal-admin-k8s](https://charmhub.io/temporal-admin-k8s) | latest/edge |
-| [airbyte-k8s](https://charmhub.io/airbyte-k8s) | latest/edge |
+| [temporal-k8s](https://charmhub.io/temporal-k8s) | 1.23/stable |
+| [temporal-admin-k8s](https://charmhub.io/temporal-admin-k8s) | 1.23/stable |
+| [airbyte-k8s](https://charmhub.io/airbyte-k8s) | 2/stable |
