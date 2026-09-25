@@ -12,14 +12,20 @@ Install MicroK8s and give your user the required permissions by adding it to the
 
 ```bash
 sudo snap install microk8s --channel 1.34-strict/stable
-newgrp snap_microk8s
 sudo usermod -a -G snap_microk8s $USER
+mkdir -p ~/.kube
 sudo chown -f -R $USER ~/.kube
+newgrp snap_microk8s
 ```
 
-Enable the necessary MicroK8s add-ons:
+```{note}
+`newgrp` applies the new group to the current shell only. If you open a new terminal, log out and back in first so it picks up the `snap_microk8s` group.
+```
+
+Wait for MicroK8s to be ready, then enable the necessary MicroK8s add-ons:
 
 ```bash
+sudo microk8s status --wait-ready
 sudo microk8s enable hostpath-storage dns
 ```
 
@@ -56,11 +62,14 @@ microk8s   1        localhost  k8s   1            built-in  A Kubernetes Cluster
 
 If for any reason MicroK8s is not recognised, register it manually with `juju add-k8s microk8s`.
 
-Next, bootstrap a Juju controller into your MicroK8s cloud. In this tutorial, the controller is named `airbyte-controller`:
+Next, make sure MicroK8s is ready after enabling the add-ons, then bootstrap a Juju controller into your MicroK8s cloud. In this tutorial, the controller is named `airbyte-controller`:
 
 ```bash
+sudo microk8s status --wait-ready
 juju bootstrap microk8s airbyte-controller
 ```
+
+If `juju bootstrap` fails with `dial tcp 127.0.0.1:16443: connect: connection refused`, the Kubernetes API server is not ready yet. Run `sudo microk8s status --wait-ready` again and retry.
 
 Finally, create a model on this controller. In this tutorial, the model is named `airbyte-model`; Juju creates a matching Kubernetes namespace:
 

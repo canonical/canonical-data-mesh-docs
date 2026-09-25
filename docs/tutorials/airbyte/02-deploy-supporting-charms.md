@@ -36,13 +36,17 @@ Deployment completes when all units are `active`.
 ## Deploy Temporal
 
 ```bash
-juju deploy temporal-k8s --config num-history-shards=4
-juju deploy temporal-admin-k8s
+juju deploy temporal-k8s --channel 1.23/stable --base ubuntu@24.04 --config num-history-shards=4
+juju deploy temporal-admin-k8s --channel 1.23/stable --base ubuntu@24.04
 juju status --watch 2s
 ```
 
 ```{note}
 Temporal requires `num-history-shards` to be a power of 2. Set it to 1024 or 2048 for a production deployment.
+```
+
+```{note}
+The Temporal charms do not publish a `latest` track, so you must set `--channel` when deploying them.
 ```
 
 At this stage, PostgreSQL and MinIO reach `active`, while the two Temporal charms stay `blocked` because they have no relations yet. This is expected; you add the relations in the next step. Your `juju status` looks similar to:
@@ -52,8 +56,8 @@ At this stage, PostgreSQL and MinIO reach `active`, while the two Temporal charm
 App                 Version                Status   Scale  Charm               Channel          Rev  Address   Exposed  Message
 minio               res:oci-image@7f2474f  active       1  minio               ckf-1.10/stable  459  10.x.x.x  no
 postgresql-k8s      14.15                  active       1  postgresql-k8s      14/stable        495  10.x.x.x  no
-temporal-admin-k8s                         blocked      1  temporal-admin-k8s  latest/edge       13  10.x.x.x  no       admin:temporal relation: not available
-temporal-k8s                               blocked      1  temporal-k8s        latest/edge       45  10.x.x.x  no       database relation not ready
+temporal-admin-k8s                         blocked      1  temporal-admin-k8s  1.23/stable       28  10.x.x.x  no       admin:temporal relation: not available
+temporal-k8s                               blocked      1  temporal-k8s        1.23/stable       68  10.x.x.x  no       database relation not ready
 
 Unit                   Workload  Agent  Address   Ports          Message
 minio/0*               active    idle   10.x.x.x  9000-9001/TCP
