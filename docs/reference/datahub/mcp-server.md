@@ -79,11 +79,11 @@ A caller needs an OAuth client before it can authenticate a user, and there are 
 
 Which endpoints a pre-registered caller is given depends on whether it discovers this server. One that reads the resource metadata finds the OAuth proxy and uses `/authorize` and `/token` here. One configured from a form does not look, and is given Google's own `https://accounts.google.com/o/oauth2/auth` and `https://oauth2.googleapis.com/token` instead. Both are accepted: the first presents a token this server minted, the second one Google minted, and each is admitted on the client it names.
 
-`enable-client-registration=false` leaves only the second kind. What that changes depends on which party is the registrar:
+`enable-client-registration=false` only allows pre-registered clients through:
 
 | Identity provider | Registrar | Effect of turning registration off |
 |---|---|---|
-| Google | This server, acting as an OAuth proxy | `/register` is withdrawn and no longer advertised, and no client but this deployment's own resolves, so callers that registered earlier are cut off too. A caller holding a token Google issued is held to the same rule by the client named on it. |
+| Google | This server, acting as an OAuth proxy | `/register` is withdrawn and no longer advertised, and the proxy resolves no client at all through `/authorize` or `/token`, not even its own. Presenting this deployment's client ID and secret there no longer works; only a caller configured against Google directly, with a token Google issued to this deployment's client, still gets in. |
 | One that registers clients itself (Hydra, Canonical Identity Platform) | The provider | The provider cannot be stopped from registering, so tokens are refused instead unless their `client_id` or `azp` claim names this deployment's client. |
 
 ## Scaling

@@ -100,11 +100,12 @@ To leave only the callers set up in advance:
 juju config datahub-mcp-k8s enable-client-registration=false
 ```
 
-Those callers are configured with this deployment's own client ID and secret, the same pair that is on the `oauth` relation, and need nothing added to the charm. The server recognizes that client without a registration.
+What that caller needs, and how it is admitted, depends on where the registrar is:
 
-The charm enforces this wherever the registrar happens to be. Fronting Google it is the registrar itself, so it withdraws `/register`, stops advertising it, and serves no client but its own. Against a provider that registers clients itself it cannot stop the registering, so it refuses tokens that were not issued to this deployment's client.
+- **Against a provider that registers clients itself**, the caller is configured with this deployment's own client ID and secret, the same pair that is on the `oauth` relation, and needs nothing added to the charm. The provider issues it a token as normal, and the server accepts it because the token's `client_id` or `azp` claim names this deployment's client.
+- **Fronting Google**, this server is the registrar. It stops serving `/register`, stops advertising it, and resolves no client through `/authorize` or `/token` at all, not even its own, so presenting this deployment's client ID and secret there no longer works. The caller must instead be configured against Google's own endpoints directly — `https://accounts.google.com/o/oauth2/auth` and `https://oauth2.googleapis.com/token` — with that same client ID and secret, and it presents a token Google issued rather than one the proxy minted.
 
-A client configured against Google directly, such as Gemini Enterprise, is unaffected either way: it already presents a token naming this deployment's client, which is what the rule asks for.
+A client already configured against Google directly, such as Gemini Enterprise, needs no change either way: it was already authenticating this way.
 
 ## Enable the mutation tools
 
@@ -141,7 +142,7 @@ Unless client registration has been turned off, the URL is all a client needs, i
 
 The first call opens a browser for the user to log in with the identity provider. What a caller sees in the catalog does not depend on who they are: every call reaches DataHub as the one service account from the `datahub-client` relation. The identity decides whether a caller may call the server at all, not what it will show them.
 
-Where registration is off, the client is instead configured with the endpoint's `/authorize` and `/token` URLs and this deployment's client ID and secret. Users still sign in as themselves; only the client is provisioned in advance.
+Where registration is off, the client is instead configured by hand with this deployment's own client ID and secret, pointed at the identity provider's own endpoints or, fronting Google, at Google's directly, as described above. Users still sign in as themselves; only the client is provisioned in advance.
 
 ## Remove the MCP server
 
