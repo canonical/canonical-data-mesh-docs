@@ -8,6 +8,7 @@ The Canonical Data Mesh is composed of the following charmed operators.
 |---|---|---|
 | Trino | Federated SQL query engine; the single access layer over all connected data sources. See the {ref}`Trino reference <reference-trino-index>`. | [trino-k8s](https://charmhub.io/trino-k8s) |
 | Superset | Self-service analytics: SQL exploration, charts, and dashboards. See the {ref}`Superset reference <reference-superset-index>`. | [superset-k8s](https://charmhub.io/superset-k8s) |
+| Superset MCP | Optional extension of Superset: serves charts and dashboards to LLM agents over the Model Context Protocol. See the {ref}`MCP server reference <reference-superset-mcp-server>`. | [superset-k8s](https://charmhub.io/superset-k8s) |
 | Ranger | Fine-grained access policies and audit for the query layer. See the {ref}`Ranger reference <reference-ranger-index>`. | [ranger-k8s](https://charmhub.io/ranger-k8s) |
 | DataHub | Metadata catalog: discovery, ownership, and lineage. See the {ref}`DataHub reference <reference-datahub-index>`. | [datahub-k8s](https://charmhub.io/datahub-k8s) |
 

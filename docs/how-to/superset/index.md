@@ -14,6 +14,7 @@ enable-sso
 trust-a-certificate-authority
 scale-and-tune-performance
 deploy-with-terraform
+deploy-the-mcp-server
 ```
 
 ## Integrations
