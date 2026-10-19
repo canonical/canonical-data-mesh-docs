@@ -11,7 +11,7 @@ The MCP server is the same `superset-k8s` charm deployed as a fourth application
 - A running Superset deployment (see the {ref}`tutorial <tutorial-superset-index>`)
 - Juju 3.4 or later
 - To authenticate callers: an ingress provider and an identity provider, as for the Superset UI. See {ref}`Expose Superset with ingress <how-to-superset-expose-with-ingress>` and {ref}`Enable single sign-on <how-to-superset-enable-sso>`.
-- An existing Superset account for anyone who will call the server: `mcp` resolves an existing user from the caller's identity but never creates one, so a first-time caller needs an account created in advance, for example through the UI application's own OAuth self-registration. The same applies to the username given to `mcp-dev-username`.
+- An existing Superset account for anyone who will call the server: `mcp` resolves an existing user from the caller's identity but never creates one, so a first-time caller needs an account created in advance, for example through the UI application's own OAuth self-registration. 
 
 ## Deploy and relate to Superset
 
