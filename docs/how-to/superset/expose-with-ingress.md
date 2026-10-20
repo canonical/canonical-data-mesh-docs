@@ -85,4 +85,4 @@ Relate the UI application only. The worker and beat applications serve no web tr
 
 ## Next steps
 
-With an HTTPS URL in place, you can {ref}`enable single sign-on <how-to-superset-enable-sso>` and set `external-url` on the worker for {ref}`alerts and reports <how-to-superset-enable-alerts-and-reports>`.
+With an HTTPS URL in place, you can {ref}`enable single sign-on <how-to-superset-enable-sso>`, set `external-url` on the worker for {ref}`alerts and reports <how-to-superset-enable-alerts-and-reports>`, or {ref}`deploy the MCP server <how-to-superset-deploy-the-mcp-server>`, which reuses this same ingress.
