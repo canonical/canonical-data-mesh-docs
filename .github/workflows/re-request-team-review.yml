@@ -4,11 +4,11 @@ on:
   workflow_call:
     inputs:
       team-slug:
-        description: "GitHub team slug to re-request (e.g. 'commercial-systems' or 'data-mesh')"
+        description: "GitHub team slug to re-request"
         required: true
         type: string
       required-approvals:
-        description: "Number of required approvals before stopping re-requests"
+        description: "Number of approvals required before stopping re-requests"
         required: false
         default: 2
         type: number
@@ -17,81 +17,54 @@ permissions: {}
 
 jobs:
   re-request:
-    name: Maintain team review request
-    # Only act on approved reviews for open, non-draft pull requests
+    name: Re-request team review
     if: >
       github.event.review.state == 'approved' &&
       github.event.pull_request.state == 'open' &&
-      !github.event.pull_request.draft
+      !github.event.pull_request.draft &&
+      contains(fromJSON('["COLLABORATOR", "MEMBER", "OWNER"]'), github.event.review.author_association)
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
     steps:
-      - name: Re-request team review
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           TEAM_SLUG: ${{ inputs.team-slug }}
           REQUIRED_APPROVALS: ${{ inputs.required-approvals }}
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const teamSlug = process.env.TEAM_SLUG;
-            const requiredApprovals = Number(process.env.REQUIRED_APPROVALS);
-            const pullNumber = context.payload.pull_request.number;
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
+            const required = Number(process.env.REQUIRED_APPROVALS);
+            const { owner, repo } = context.repo;
+            const pull_number = context.payload.pull_request.number;
 
-            // 1. Fetch PR details for pending reviewers and requested teams
-            const { data: pr } = await github.rest.pulls.get({
-              owner,
-              repo,
-              pull_number: pullNumber,
-            });
+            const [{ data: pr }, reviews] = await Promise.all([
+              github.rest.pulls.get({ owner, repo, pull_number }),
+              github.paginate(github.rest.pulls.listReviews, { owner, repo, pull_number }),
+            ]);
 
-            // 2. Fetch all reviews to find the latest state per reviewer
-            const reviews = await github.paginate(github.rest.pulls.listReviews, {
-              owner,
-              repo,
-              pull_number: pullNumber,
-            });
-
-            const latestReviewByUser = new Map();
+            const latestByUser = new Map();
             for (const r of reviews) {
-              latestReviewByUser.set(r.user.login, r.state);
+              latestByUser.set(r.user.login, r.state);
             }
 
-            const currentApprovals = Array.from(latestReviewByUser.values())
-              .filter(state => state === 'APPROVED').length;
+            const approvals = [...latestByUser.values()].filter(s => s === 'APPROVED').length;
+            const pendingUsers = pr.requested_reviewers?.length ?? 0;
 
-            const pendingIndividuals = pr.requested_reviewers ? pr.requested_reviewers.length : 0;
-
-            // If approvals + pending individual reviewers already meet or exceed target, do not re-request
-            if (currentApprovals + pendingIndividuals >= requiredApprovals) {
-              core.info(
-                `Goal satisfied: ${currentApprovals} approval(s) + ` +
-                `${pendingIndividuals} pending individual(s) >= ${requiredApprovals}. No re-request needed.`
-              );
+            if (approvals + pendingUsers >= required) {
               return;
             }
 
-            // 3. Check if team is already in requested_teams
-            const isTeamRequested = pr.requested_teams?.some(
-              team => team.slug.toLowerCase() === teamSlug.toLowerCase()
+            const alreadyRequested = pr.requested_teams?.some(
+              t => t.slug.toLowerCase() === teamSlug.toLowerCase()
             );
-
-            if (isTeamRequested) {
-              core.info(`Team '${teamSlug}' is already requested. No action needed.`);
+            if (alreadyRequested) {
               return;
             }
 
-            // 4. Re-request team review
             await github.rest.pulls.requestReviewers({
               owner,
               repo,
-              pull_number: pullNumber,
+              pull_number,
               team_reviewers: [teamSlug],
             });
-
-            core.info(
-              `Re-requested review from team '${teamSlug}'. ` +
-              `(Approvals: ${currentApprovals}, Pending: ${pendingIndividuals}, Target: ${requiredApprovals})`
-            );
