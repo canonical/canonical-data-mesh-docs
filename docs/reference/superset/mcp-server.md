@@ -43,7 +43,7 @@ The application stays `blocked` until it has exactly one identity source: the `o
 | `list_charts` | List chart metadata: ID, name, visualization type, URL, and last modified time. |
 | `get_chart_info` | Fetch a saved or unsaved chart's configuration and metadata by ID or form-data key. |
 | `get_chart_data` | Return the data behind a chart, for analysis without rendering an image. |
-| `get_chart_preview` | Render a chart preview as a URL, an ASCII chart, a table, or Vega-Lite content. |
+| `get_chart_preview` | Render a chart preview as a URL link into Superset. |
 | `get_chart_type_schema` | Return the fields, types, and constraints for a chart type, to use before calling `generate_chart` or `update_chart`. |
 | `generate_chart` | Build a chart from a dataset and a visualization type, previewing it by default. |
 | `update_chart` | Modify an existing saved chart. |
@@ -68,6 +68,10 @@ The application stays `blocked` until it has exactly one identity source: the `o
 `mcp-disabled-tools` removes tools from this set by name; unknown names are logged and otherwise ignored.
 
 There is no separate toggle for write tools: every tool above is served, and each one checks the calling user's own Superset role against the permission it needs (for example, `update_chart` requires write access to charts) before it runs. Under `mcp-dev-username`, that check is skipped entirely, so every tool succeeds regardless of role.
+
+### Preview guard
+
+To prevent prompt-injected or exploratory models from inlining warehouse rows via chart-drawing tools, `generate_chart` and `update_chart` only support `url` previews. The MCP service coerces `preview_formats` to `["url"]` and strips tabular or ASCII chart rows from outgoing responses. Accessing the preview requires following the generated link into Superset, which enforces user session and permission checks.
 
 ## Identity resolution
 
