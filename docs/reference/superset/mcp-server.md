@@ -69,6 +69,16 @@ The application stays `blocked` until it has exactly one identity source: the `o
 
 There is no separate toggle for write tools: every tool above is served, and each one checks the calling user's own Superset role against the permission it needs (for example, `update_chart` requires write access to charts) before it runs. Under `mcp-dev-username`, that check is skipped entirely, so every tool succeeds regardless of role.
 
+### Preview guard
+
+The `mcp-restrict-chart-data-previews` configuration option (default: `false`) limits chart previews to a URL link into Superset. When it is `true`:
+
+- `generate_chart`, `update_chart`, and `update_chart_preview` accept only the `url` preview format; `ascii`, `table`, and `vega_lite` are replaced with `url`, and are no longer offered in the tool schemas.
+- Preview data is removed from every tool's response, not only from these three.
+- `get_chart_data` and `get_chart_preview` are disabled, since they exist only to return rows.
+
+This lets a deployment holding sensitive data keep the charting tools while keeping warehouse rows out of the chat. Opening the link shows the chart in Superset, under the user's own login and permissions. The option does not cover other tools that return data, such as `execute_sql`: disable those with `mcp-disabled-tools`.
+
 ## Identity resolution
 
 The role check above needs to match a bearer token to an existing Superset user, resolved from the token's claims (`sub` or `email`, depending on the provider). This only matches an account that already exists - a first-time caller needs one created in advance, for example through the UI application's own OAuth self-registration (`self-registration-role`).
